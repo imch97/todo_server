@@ -25,14 +25,14 @@ exports.todo_create = function (req, res) {
 };
 
 exports.todo_details = function (req, res) {
-    ToDoItem.findById(req.params.id, function (err, todo) {
+    ToDoItem.findById(req.body.id, function (err, todo) {
         if (err) return next(err);
         res.send(todo);
     })
 };
 
 exports.todo_update = function (req, res) {
-    ToDoItem.findByIdAndUpdate(req.params.id, {$set: req.body}, function (err, todo) {
+    ToDoItem.findByIdAndUpdate(req.body.id, {$set: req.body}, function (err, todo) {
         if (err) return next(err);
         res.send('ToDo udpated.');
     });
@@ -40,7 +40,7 @@ exports.todo_update = function (req, res) {
 
 
 exports.todo_delete = function (req, res) {
-    ToDoItem.findByIdAndRemove(req.params.id, function (err) {
+    ToDoItem.findByIdAndRemove(req.body.id, function (err) {
         if (err) return next(err);
         res.send('Deleted successfully!');
     })
