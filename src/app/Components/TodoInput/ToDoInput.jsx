@@ -6,8 +6,7 @@ import { connect } from 'react-redux'
 
 
 const ToDoInput = ( props ) => {
-    const [value, setValue] = useState("");
-    // const newTodos = [...todos, { text: value, id: new Date().getTime(), isCompleted: false }];
+    const [value, setValue] = useState("");    
     const handleSubmit = e => {
         e.preventDefault();
         if (!value) {
