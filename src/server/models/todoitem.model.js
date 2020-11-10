@@ -10,4 +10,4 @@ let ToDoSchema = new Schema({
 
 
 // Export the model
-module.exports = mongoose.model('ToDo', ToDoSchema);
+module.exports = mongoose.model('ToDoItems', ToDoSchema);
