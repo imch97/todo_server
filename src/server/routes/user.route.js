@@ -11,7 +11,7 @@ router.get('/test', user_controller.test);
 module.exports = router;
 
 //CRUD
-router.post('/create', user_controller.user_create);
-router.get('/:id', user_controller.user_details);
-router.put('/:id/update', user_controller.user_update);
-router.delete('/:id/delete', user_controller.user_delete);
+router.post('/', user_controller.user_create);
+router.get('/', user_controller.user_details);
+router.put('/update', user_controller.user_update);
+router.delete('/delete', user_controller.user_delete);
