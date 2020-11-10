@@ -1,0 +1,81 @@
+//todo implement styles for the TodoList here
+.todo-list {
+  background: white;
+  border-radius: 4px;
+  padding: 5px;
+  max-width: 500px;
+  margin: 0 auto;
+  filter: drop-shadow(1px 1px 7px black);
+}
+.footer { 
+  margin: 0;
+  display: flex;
+  list-style: none;
+  padding: 0 0 0 17px;
+}
+.filterButton {
+  margin-right: 5px;
+}
+.clearTasksButton {
+  padding-top: 3px;
+  font-size: 12px;
+  margin-top: 2px;
+  font-family: sans-serif;
+  color: gray;
+  float: right;
+  margin-left: 20px;
+}
+.clearTasksButton:hover{
+  cursor: pointer;
+}
+.input {
+  width: 95%;
+  border: none;
+  padding: 0 1vh 0 1vh;
+  outline: none;
+}
+.taskCount {
+  padding-top: 3px;
+  font-size: 12px;
+  margin-top: 2px;
+  font-family: sans-serif;
+  color: gray;
+  margin-right: 15px;
+}
+.taskCount:hover {
+  cursor: pointer;
+}
+li {
+  list-style: none;
+}
+.footer-button {
+  margin-right: 15px;
+}
+button {
+  background: white;
+  border: 1px solid gray;
+  border-radius: 3px;
+}
+.list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+.footerSection {
+  text-align: right;
+  vertical-align: middle;
+  align-content: center;
+  height: 50px;
+  padding-top: 10px;
+}
+.form {
+  padding: 10px 0 10px 0;
+}
+
+.active {
+  //text-transform: uppercase;
+  border: 2px solid gray;
+}
+
+input[type=radio]{
+  display: none;
+}
