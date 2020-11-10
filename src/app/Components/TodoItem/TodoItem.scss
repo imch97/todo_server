@@ -1,0 +1,76 @@
+.todo {
+  background: #fff;
+  box-shadow: 1px 1x 1px rgba(0, 0, 0, 0.15);
+  //padding: 3px 10px;
+  padding-right: 10px;
+  font-size: 12px;
+  // margin-bottom: 6px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.taskText {
+  font-size: 2.2vh;
+  width: 100vh;
+  margin-left: 1vh;
+  text-align: justify;
+}
+.deleteTask {
+  float: right;
+  size: 50px;
+}
+
+
+
+
+
+[type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 20px; height: 20px;
+  border: 1px solid #aaa;
+  // padding-top: 3px;
+  margin-top: 4px;
+  margin-right: 20px;
+  margin-left: 3px;
+  border-radius: 50%;
+  
+}
+
+
+
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+  content: '✔';
+  display: absolute;
+  margin-left: 5px;
+  font-size: 20px;  
+  color: #09ad7e;
+  transition: all .2s;
+}
+
+[type="checkbox"]:not(:checked) + label:after {
+  opacity: 0;
+  transform: scale(0);
+}
+
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+  position: absolute;
+  left: -9999px;
+}
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+  //position: relative;
+  padding-top: 10px;
+  cursor: pointer;
+}
+
+.todos input[type=checkbox]{
+  display: none;
+}
+
+
