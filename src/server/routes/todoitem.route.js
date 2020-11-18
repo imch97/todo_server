@@ -15,3 +15,5 @@ router.post('/', todoitem_controller.todo_create);
 router.get('/', todoitem_controller.todo_details);
 router.put('/update', todoitem_controller.todo_update);
 router.delete('/delete', todoitem_controller.todo_delete);
+
+router.get('/all', todoitem_controller.todo_getAll);

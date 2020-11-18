@@ -1,4 +1,5 @@
 //contollers for todo
+//const { default: TodoItem } = require('../../app/Components/TodoItem/TodoItem');
 const ToDoItem = require('../models/todoitem.model');
 
 //Simple version, without validation or sanitation
@@ -9,13 +10,13 @@ exports.test = function (req, res) {
 
 exports.todo_create = function (req, res) {
     let todo = new ToDoItem(
-        {
+        {            
             text: req.body.text,
             completed: req.body.completed
         },
-        console.log("Todo Created")
+    
     );
-
+    console.log("Todo Created: ", todo)
     todo.save(function (err) {
         if (err) {
             return next(err);
@@ -45,3 +46,12 @@ exports.todo_delete = function (req, res) {
         res.send('Deleted successfully!');
     })
 };
+
+exports.todo_getAll = function (req, res) {
+    ToDoItem.find({}, null, {sort: 'критерий сортировки'},function (err, todos) {
+        //console.log (res); //вот здесь будут все документы
+        
+        res.send(todos); 
+    });
+    
+}

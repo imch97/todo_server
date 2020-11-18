@@ -15,7 +15,7 @@ export const todoSlice = createSlice({
     addTodo: {
       reducer(state, action) {
         const { id, text } = action.payload
-        submitTodo(text);
+        submitTodo(id, text);
         state.push({ id, text, completed: false })
       },
       prepare(text) {

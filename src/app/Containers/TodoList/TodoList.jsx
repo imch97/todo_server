@@ -25,6 +25,8 @@ import RadioBadge from "../../Components/RadioBadge/RaidoBadge";
 import { controlBadges } from '../../constants/todo';
 import {text} from "@fortawesome/fontawesome-svg-core";
 
+import getAllTodo from '../../../../src/api.js'
+
 /**
  * todo implement HOC for display the list of the todos and control panel and input for add new todos
  */
@@ -70,8 +72,10 @@ const TodoList = (props) => {
             <div className="todo-list">
                 <ToDoInput/>
                 <hr/>
-                <div className="list">
+                <div className="list">                    
+                {/*getAllTodo.map((todo, index) => {console.log('todo', todo); console.log('index', index)})*/}    
                     {state.items.map((todo, index) => (
+                        
                         <TodoItem
                         id={todo.id}
                         index={index}
