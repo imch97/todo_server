@@ -50,6 +50,10 @@ const TodoList = (props) => {
         localStorage.setItem('todos', JSON.stringify(todos))
     }, [todos])
 
+    
+    
+
+
     const btnClick = name => () => {        
         const todoList = todos.filter(FILTER_MAP[name])
         setState({items: todoList, filter: name,})  
@@ -76,7 +80,7 @@ const TodoList = (props) => {
                         //onRemove={remove}
                         onRemove={() => remove({id: todo.id, text: todo.text}) }
                         markAsChecked={() => markAsCheck({id: todo.id, completed: todo.completed})}
-                        //markAsChecked={markAsCheck}
+                        // markAsChecked={markAsCheck}
                         todo={todo}
                         />
                         ))}
@@ -138,7 +142,7 @@ const mapDispatchToProps = {
     remove: actions.remove,
     markAsCheck: actions.markAsCheck,
     //remove: (todo) => actions.remove({id: todo.id, text: todo.text}),
-    //markAsCheck: (todo) => actions.markAsCheck({id: todo.id, completed: todo.completed}),
+    // markAsCheck: (todo) => actions.markAsCheck({id: todo.id, completed: todo.completed}),
 
     clearCompleted: actions.clearCompleted,
     checkAll: actions.checkAll
