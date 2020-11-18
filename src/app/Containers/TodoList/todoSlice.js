@@ -20,10 +20,12 @@ export const todoSlice = createSlice({
       }
     },
     remove: (state, action, index) => {
-      const { id, text } = action.payload
+      const { id, text } = action.payload      
       state.splice(state.findIndex(i => i.id === id), 1)
     },
-    markAsChecked: (state, action) => {
+    markAsCheck: (state, action) => {
+      //console.log("todo id ",state.todo.id)      
+      const { id, completed} = action.payload      
       return state.map (todo => todo.id === action.payload.id ? {...todo, completed: !todo.completed} : todo)
     },
     clearCompleted: (state) => {

@@ -23,6 +23,7 @@ exports.user_create = function (req, res) {
             return next(err);
         }
         res.send('User Created successfully')
+        console.log("Save new user") 
     })
 };
 
@@ -31,12 +32,14 @@ exports.user_details = function (req, res) {
         if (err) return next(err);
         res.send(user);
     })
+    console.log("Show details user") 
 };
 
 exports.user_update = function (req, res) {
     User.findByIdAndUpdate(req.body.id, {$set: req.body}, function (err, user) {
         if (err) return next(err);
         res.send('User udpated.');
+        console.log("Update user") 
     });
 };
 
@@ -45,5 +48,6 @@ exports.user_delete = function (req, res) {
     User.findByIdAndRemove(req.body.id, function (err) {
         if (err) return next(err);
         res.send('Deleted successfully!');
+        console.log("Delete user") 
     })
 };

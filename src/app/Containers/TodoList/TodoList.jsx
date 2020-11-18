@@ -29,7 +29,7 @@ import {text} from "@fortawesome/fontawesome-svg-core";
  * todo implement HOC for display the list of the todos and control panel and input for add new todos
  */
 
-//sort ToDo
+
 const TodoList = (props) => {
     const FILTER_MAP = {
         All: () => true,
@@ -37,7 +37,7 @@ const TodoList = (props) => {
         Completed: todo => todo.completed
     };
 
-    const {todos, remove, markAsChecked, clearCompleted, checkAll} = props
+    const {todos, remove, markAsCheck, clearCompleted, checkAll} = props
     const [state, setState] = useState({items: todos, filter: 'All'})
 
     useEffect(()  => {
@@ -73,10 +73,10 @@ const TodoList = (props) => {
                         index={index}
                         key={todo.id}
                         text={todo.text}
-                        onRemove={remove}
-                    // onRemove={() => remove({id: todo.id, text: todo.text}) }
-                        markAsChecked={() => markAsChecked({id: todo.id, completed: todo.completed})}
-                        //markAsChecked={markAsChecked}
+                        //onRemove={remove}
+                        onRemove={() => remove({id: todo.id, text: todo.text}) }
+                        markAsChecked={() => markAsCheck({id: todo.id, completed: todo.completed})}
+                        //markAsChecked={markAsCheck}
                         todo={todo}
                         />
                         ))}
@@ -95,7 +95,7 @@ const TodoList = (props) => {
                         <li>
                         {/* <div className="btn-group btn-group-toggle" data-toggle="buttons"> */}
                             {controlBadges.map((name) => (
-                                <button className={  name === state.filter ? " active" :'' } onClick={btnClick(name)}>                                    
+                                <button className={  name === state.filter ? "active" :'' } onClick={btnClick(name)}>                                    
                                 <input type="radio" className="options" autoComplete="off"
                                     key={name}
                                     onClick={btnClick(name)}
@@ -135,9 +135,10 @@ TodoList.propTypes = {
 const mapStateToProps = state => ({todos: state.todo})
 const mapDispatchToProps = {
     addTodo: actions.addTodo,
-    // remove: actions.remove,
-    remove: (todo) => actions.remove({id: todo.id, text: todo.text}),
-    markAsChecked: (todo) => actions.markAsChecked({id: todo.id, completed: todo.completed}),
+    remove: actions.remove,
+    markAsCheck: actions.markAsCheck,
+    //remove: (todo) => actions.remove({id: todo.id, text: todo.text}),
+    //markAsCheck: (todo) => actions.markAsCheck({id: todo.id, completed: todo.completed}),
 
     clearCompleted: actions.clearCompleted,
     checkAll: actions.checkAll

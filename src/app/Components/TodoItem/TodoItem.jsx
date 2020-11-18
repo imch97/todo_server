@@ -48,7 +48,7 @@ const TodoItem = ({todo, text, id, completed, markAsChecked, onRemove}) => {
 TodoItem.propTypes = {
     text: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
-    markAsChecked: PropTypes.bool.isRequired,
+    markAsChecked: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
 }
 
