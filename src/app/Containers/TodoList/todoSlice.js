@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import submitTodo from '../../../../src/api.js'
+//import submitTodo from '../../../../src/api.js'
+import submitTodo from '../../../api/todo/api'
 // /home/user/work/js/todo_server/src/app/Containers/TodoList/todoSlice.js
 export const initialState = {
   tasks: [],  // task should have a format {id: unique_value, text: taks_text, checked: flag_show_if_task_completed (false by default) }

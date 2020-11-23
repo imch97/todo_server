@@ -25,7 +25,7 @@ import RadioBadge from "../../Components/RadioBadge/RaidoBadge";
 import { controlBadges } from '../../constants/todo';
 import {text} from "@fortawesome/fontawesome-svg-core";
 
-import getAllTodo from '../../../../src/api.js'
+//import getAllTodo from '../../../../src/api.js'
 
 /**
  * todo implement HOC for display the list of the todos and control panel and input for add new todos
