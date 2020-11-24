@@ -33,12 +33,8 @@ const TodoItem = ({todo, text, id, completed, markAsChecked, onRemove}) => {
                 <div className = "checkbox1">  
             <input type="checkbox" onClick={markAsChecked} checked={todo.completed}/>
 
-<<<<<<< HEAD
                 <label className = "checkbox" onClick={markAsChecked} checked={todo.completed}></label>
                 </div> 
-=======
-                <label  className = "checkbox"  onClick={markAsChecked} checked={todo.completed}></label>
->>>>>>> b8004b04c275763745f9cbfbc78c9a858056fd4c
                 <div className="taskText" style={{textDecoration: todo.completed ? 'line-through' : 'none'}}>
                     {todo.text}
                     <div className="deleteTask" onClick={onRemove}>                        

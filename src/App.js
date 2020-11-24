@@ -1,13 +1,19 @@
 import React from 'react';
-import './App.css';
+import {BrowserRouter as Router} from 'react-router-dom'
+//import './App.css';
 import TodoList from "./app/Containers/TodoList/TodoList";
 import ToDoInput from "./app/Components/TodoInput/ToDoInput";
-
+import {Loader} from './app/Components/loader/Loader'
+import {useRoutes} from './app/routes'
+import {useAuth} from './app/hooks/auth.hook'
+import {AuthContext} from './app/context/AuthContext'
+import 'materialize-css'
+/*
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {/*todo place your todo header here */}
+        //{todo place your todo header here }
         Your todo list
       </header>
       <section>
@@ -15,6 +21,30 @@ function App() {
       </section>
     </div>
   );
+}
+*/
+
+function App() {
+  const {token, login, logout, userId, ready} = useAuth()
+  const isAuthenticated = !!token
+  const routes = useRoutes(isAuthenticated)
+
+  if (!ready) {
+    return <Loader />
+  }
+
+  return (
+    <AuthContext.Provider value={{
+      token, login, logout, userId, isAuthenticated
+    }}>
+      <Router>
+        { isAuthenticated && <TodoList/>}
+        <div className="container">
+          {routes}
+        </div>
+      </Router>
+    </AuthContext.Provider>
+  )
 }
 
 export default App;

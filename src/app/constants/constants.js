@@ -1,1 +1,1 @@
-const STORAGE_NAME = 'userData';
+const STORAGE_NAME = 'userDataTODO';

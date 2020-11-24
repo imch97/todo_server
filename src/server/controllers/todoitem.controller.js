@@ -1,6 +1,11 @@
 //contollers for todo
 //const { default: TodoItem } = require('../../app/Components/TodoItem/TodoItem');
 const ToDoItem = require('../models/todoitem.model');
+//const auth = require('../middleware/auth.middleware.js')
+const {BASE_URL,JWT_SECRET} = require('../constans/constans.js')
+
+const jwt = require('jsonwebtoken')
+
 
 //Simple version, without validation or sanitation
 exports.test = function (req, res) {
@@ -54,4 +59,40 @@ exports.todo_getAll = function (req, res) {
         res.send(todos); 
     });
     
+}
+
+//logic methods for
+
+exports.todo_create_with_users = function(req, res){
+    try {
+        
+        const {text} = req.body           
+    
+            
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, JWT_SECRET)
+        
+        const todoitem = new ToDoItem({
+            text, completed, owner: decoded.id
+        })
+    
+        await todoitem.save()
+    
+        res.status(201).json({ todoitem })
+      } catch (e) {
+        res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
+    }
+}
+
+exports.todo_get = function (req,res){
+    try {
+
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, JWT_SECRET)
+
+        const todoitem = await Link.find({ owner: decoded.id })
+        res.json(todoitem)
+      } catch (e) {
+        res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
+      }
 }

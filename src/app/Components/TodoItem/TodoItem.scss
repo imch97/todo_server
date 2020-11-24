@@ -9,6 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin: 3px;
 }
 .taskText {
   font-size: 2.2vh;
@@ -29,7 +30,7 @@
 [type="checkbox"]:checked + label:before {
   content: '';
   display: block;
-  //position: absolute;  
+  position: absolute;  
   width: 20px; height: 20px;
   border: 1px solid #aaa;
   
@@ -37,7 +38,7 @@
   margin-right: 20px;
   margin-left: 3px;
   border-radius: 50%;
-  //position: relative;
+  // position: absolute;
 }
 
 
@@ -49,7 +50,7 @@
   font-size: 20px;  
   color: #09ad7e;
   transition: all .2s;
-  //position: relative;
+  // position: relative;
 }
 
 [type="checkbox"]:not(:checked) + label:after {
@@ -61,7 +62,7 @@
 [type="checkbox"]:checked {
   position: absolute;
   left: -9999px;
-  position: relative;
+  // position: relative;
 }
 [type="checkbox"]:not(:checked) + label,
 [type="checkbox"]:checked + label {
@@ -81,7 +82,7 @@
 }
 
 hr{
-  margin: 0;
+  margin: 2px;
 }
 
 label{
