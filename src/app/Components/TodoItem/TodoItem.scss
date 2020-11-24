@@ -29,10 +29,10 @@
 [type="checkbox"]:checked + label:before {
   content: '';
   display: block;
-  position: absolute;
+  //position: absolute;  
   width: 20px; height: 20px;
   border: 1px solid #aaa;
-  // padding-top: 3px;
+  
   margin-top: 4px;
   margin-right: 20px;
   margin-left: 3px;
@@ -45,11 +45,16 @@
 [type="checkbox"]:not(:checked) + label:after,
 [type="checkbox"]:checked + label:after {
   content: '✔';
-  display: absolute;
+  display: inline-flex;
   margin-left: 5px;
   font-size: 20px;  
   color: #09ad7e;
   transition: all .2s;
+
+  
+  margin-right: 20px;
+  
+  
 }
 
 [type="checkbox"]:not(:checked) + label:after {
@@ -61,6 +66,9 @@
 [type="checkbox"]:checked {
   position: absolute;
   left: -9999px;
+  //opacity: 0;
+  // display: none;
+  // visibility: hidden;
 }
 [type="checkbox"]:not(:checked) + label,
 [type="checkbox"]:checked + label {
@@ -73,4 +81,16 @@
   display: none;
 }
 
+.checkbox1{
+  text-align: center;
+  align-items: center;
+  align-content: center;
+}
 
+hr{
+  margin: 0;
+}
+
+label{
+  margin-bottom: 0;
+}
