@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import Button from 'react-bootstrap/Button';
 import {connect} from 'react-redux';
 import TodoItem from '../../Components/TodoItem/TodoItem';
@@ -25,6 +25,7 @@ import RadioBadge from "../../Components/RadioBadge/RaidoBadge";
 import { controlBadges } from '../../constants/todo';
 import {text} from "@fortawesome/fontawesome-svg-core";
 
+
 //import getAllTodo from '../../../../src/api.js'
 
 /**
@@ -32,7 +33,12 @@ import {text} from "@fortawesome/fontawesome-svg-core";
  */
 
 
+
 const TodoList = (props) => {
+    
+    
+    
+    
     const FILTER_MAP = {
         All: () => true,
         ToDo: todo => !todo.completed,
@@ -80,7 +86,7 @@ const TodoList = (props) => {
                         id={todo.id}
                         index={index}
                         key={todo.id}
-                        text={todo.text}
+                        text={todo.text}                        
                         //onRemove={remove}
                         onRemove={() => remove({id: todo.id, text: todo.text}) }
                         markAsChecked={() => markAsCheck({id: todo.id, completed: todo.completed})}

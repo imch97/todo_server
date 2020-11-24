@@ -63,7 +63,7 @@ exports.todo_getAll = function (req, res) {
 
 //logic methods for
 
-exports.todo_create_with_users = function(req, res){
+exports.todo_create_with_users = async function(req, res){
     try {
         
         const {text} = req.body           
@@ -73,9 +73,9 @@ exports.todo_create_with_users = function(req, res){
         const decoded = jwt.verify(token, JWT_SECRET)
         
         const todoitem = new ToDoItem({
-            text, completed, owner: decoded.id
+            text, completed:false, owner: decoded.userId
         })
-    
+        
         await todoitem.save()
     
         res.status(201).json({ todoitem })
@@ -84,7 +84,7 @@ exports.todo_create_with_users = function(req, res){
     }
 }
 
-exports.todo_get = function (req,res){
+exports.todo_get = async function (req,res){
     try {
 
         const token = req.headers.authorization.split(' ')[1];

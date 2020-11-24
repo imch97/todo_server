@@ -12,12 +12,12 @@ router.get('/test', todoitem_controller.test);
 module.exports = router;
 
 //CRUD
-router.post('/', todoitem_controller.todo_create);
-router.get('/', todoitem_controller.todo_details);
+//router.post('/', todoitem_controller.todo_create);
+//router.get('/', todoitem_controller.todo_details);
 router.put('/update', todoitem_controller.todo_update);
 router.delete('/delete', todoitem_controller.todo_delete);
 
 router.get('/all', todoitem_controller.todo_getAll);
 
-router.post('/',auth, todoitem_controller.todo_create_with_users)
+router.post('/', todoitem_controller.todo_create_with_users)
 router.get('/',auth,todoitem_controller.todo_get);
