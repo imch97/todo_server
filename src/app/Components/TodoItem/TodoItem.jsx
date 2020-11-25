@@ -10,6 +10,8 @@ import './TodoItem.scss';
 import TodoList from "../../Containers/TodoList/TodoList";
 import removeTodo from "../../Containers/TodoList/TodoList"
 
+
+
 /**
  * todo implement here component which will show todo item
  * Component should contain checkbox text and trash icon for remove item
@@ -24,6 +26,8 @@ import removeTodo from "../../Containers/TodoList/TodoList"
  * NOTE: need to pass task id into callbacks as param
  */
 
+ 
+
 const TodoItem = ({todo, text, id, completed, markAsChecked, onRemove}) => {
     return (
         <React.Fragment>
@@ -33,7 +37,7 @@ const TodoItem = ({todo, text, id, completed, markAsChecked, onRemove}) => {
                  
             <input type="checkbox" onClick={markAsChecked} checked={todo.completed}/>
 
-                <label className = "checkbox" onClick={markAsChecked} checked={todo.completed}></label>
+                <label className = "checkbox" onClick={markAsChecked}  checked={todo.completed}></label>
                 
                 <div className="taskText" style={{textDecoration: todo.completed ? 'line-through' : 'none'}}>
                     {todo.text}

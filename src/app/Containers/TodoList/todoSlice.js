@@ -60,13 +60,27 @@ export const fetchTodoDelete = createAsyncThunk('/todoitem', async (_id) => {
     const auth = useContext(AuthContext)
     const message = useMessage()
     const {request,} = useHttp()
-    console.log('POPAL')
+    
   const response = await request('/todoitem', 'DELETE', {_id}, {
     Authorization: `Bearer ${auth.token}`
   })
   message('ToDo DELETED!');
   
   
+})
+
+export const fetchTodoUpdate = createAsyncThunk('/todoitem', async (_id,completed) => {
+
+  const auth = useContext(AuthContext)
+  const message = useMessage()
+  const {request,} = useHttp()
+  const update_completed = !completed;
+const response = await request('/todoitem', 'PUT', {_id, completed: update_completed}, {
+  Authorization: `Bearer ${auth.token}`
+})
+message('ToDo Update!');
+
+
 })
 
 export const actions = todoSlice.actions;
