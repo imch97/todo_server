@@ -57,13 +57,12 @@ const TodoList = (props) => {
     };
 
     const {todos, remove, markAsCheck, clearCompleted, checkAll} = props
-    const [state, setState] = useState([{items: todos, filter: 'All'}])
-
-    
+    const [state, setState] = useState({items: todos, filter: 'All'})
 
     useEffect(()  => {
         const todoList = todos.filter(FILTER_MAP['All'])
-        setState({items: todoList, filter: 'All'})        
+        setState({items: todoList, filter: 'All'})
+        
     },[todos])
 
     useEffect(() => {
@@ -80,7 +79,7 @@ const TodoList = (props) => {
           const fetched = await request('/todoitem', 'GET', null, {
             Authorization: `Bearer ${token}`
           })
-          setState(fetched)
+          //setState(fetched)
         } catch (e) {}
       }, [token, request])
 
@@ -133,7 +132,7 @@ const TodoList = (props) => {
                         
                         todo={todo}
                         />
-                        ))}
+                ))}
                 </div>
                 {todos.length != 0  &&
                 <div className="footerSection" >
