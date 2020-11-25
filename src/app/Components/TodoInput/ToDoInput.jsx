@@ -43,7 +43,7 @@ const ToDoInput = ( props ) => {
       }
 
     return (
-        <form className="form" onSubmit={handleSubmit}>
+        <form className="form" /*onSubmit={handleSubmit}*/>
             <input
                 type="text"
                 className="input"

@@ -57,14 +57,18 @@ const TodoList = (props) => {
     };
 
     const {todos, remove, markAsCheck, clearCompleted, checkAll} = props
-    const [state, setState] = useState({items: todos, filter: 'All'})
+    const [state, setState] = useState({items: [], filter: 'All'})
 
+
+
+    
+/*
     useEffect(()  => {
         const todoList = todos.filter(FILTER_MAP['All'])
         setState({items: todoList, filter: 'All'})
-        
+        //setState({items: fetched, filter: 'All'})
     },[todos])
-
+*/
     useEffect(() => {
         localStorage.setItem('todos', JSON.stringify(todos))
     }, [todos])
@@ -79,7 +83,7 @@ const TodoList = (props) => {
           const fetched = await request('/todoitem', 'GET', null, {
             Authorization: `Bearer ${token}`
           })
-          //setState(fetched)
+          setState({items: fetched, filter: 'All'})
         } catch (e) {}
       }, [token, request])
 
@@ -95,7 +99,7 @@ const TodoList = (props) => {
 
 
     const btnClick = name => () => {        
-        const todoList = todos.filter(FILTER_MAP[name])
+        const todoList = state.items.filter(FILTER_MAP[name])//todos вместо state.items
         setState({items: todoList, filter: name,})  
     };
 
@@ -120,29 +124,30 @@ const TodoList = (props) => {
                     
                 {state.items.map((todo, index) => (
                         
+                        
                         <TodoItem
-                        id={todo.id}
+                        id={todo._id}                        
                         index={index}
-                        key={todo.id}
+                        key={todo._id}
                         text={todo.text}                        
                         //onRemove={remove}
                         // markAsChecked={markAsCheck}
-                        onRemove={() => remove({id: todo.id, text: todo.text}) }
-                        markAsChecked={() => markAsCheck({id: todo.id, completed: todo.completed})}
+                        onRemove={() => remove({id: todo._id, text: todo.text}) }
+                        markAsChecked={() => markAsCheck({id: todo._id, completed: todo.completed})}
                         
                         todo={todo}
                         />
                 ))}
                 </div>
-                {todos.length != 0  &&
+                {state.items.length != 0  &&
                 <div className="footerSection" >
                     <ul className="footer">
                         <li
                             className="taskCount"
                             onClick={checkAll}
                         >                            
-                            {todos.map(el => lostCountToDo(el))}                            
-                            {`${todos.length - kol.length} `}
+                            {state.items.map(el => lostCountToDo(el))}                            
+                            {`${state.items.length - kol.length} `}
                             tasks left
                         </li>
                         <li>

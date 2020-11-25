@@ -34,8 +34,8 @@
   width: 20px; height: 20px;
   border: 1px solid #aaa;
   
-  margin-top: 4px;
-  margin-right: 20px;
+  //margin-top: 4px;
+  //margin-right: 20px;
   margin-left: 3px;
   border-radius: 50%;
   // position: absolute;
@@ -47,10 +47,12 @@
   content: '✔';
   display: inline-flex;
   margin-left: 5px;
+  //margin-bottom: 8px;
   font-size: 20px;  
   color: #09ad7e;
   transition: all .2s;
-  // position: relative;
+   position: relative;
+   bottom: 4px;
 }
 
 [type="checkbox"]:not(:checked) + label:after {
