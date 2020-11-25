@@ -1,6 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import submitTodo from '../../../api/todo/api'
+
+import {useHttp} from '../../hooks/http.hook.js'
+import {useMessage} from '../../hooks/message.hook.jsx'
+import {AuthContext} from '../../context/AuthContext.jsx'
+import {useContext} from 'react';
+
 
 
 //import todo_create_with_users from '../../../'
@@ -28,7 +34,11 @@ export const todoSlice = createSlice({
       }
     },
     remove: (state, action, index) => {
-      const { id, text } = action.payload      
+      
+      const { id, text } = action.payload 
+      
+      fetchTodoDelete(id);
+           
       state.splice(state.findIndex(i => i.id === id), 1)
     },
     markAsCheck: (state, action) => {          
@@ -45,6 +55,19 @@ export const todoSlice = createSlice({
   },
 });
 
+export const fetchTodoDelete = createAsyncThunk('/todoitem', async (_id) => {
+
+    const auth = useContext(AuthContext)
+    const message = useMessage()
+    const {request,} = useHttp()
+    console.log('POPAL')
+  const response = await request('/todoitem', 'DELETE', {_id}, {
+    Authorization: `Bearer ${auth.token}`
+  })
+  message('ToDo DELETED!');
+  
+  
+})
 
 export const actions = todoSlice.actions;
 

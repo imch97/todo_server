@@ -22,3 +22,5 @@ router.get('/all', todoitem_controller.todo_getAll);
 
 router.post('/',auth, todoitem_controller.todo_create_with_users)
 router.get('/',auth,todoitem_controller.todo_get);
+router.delete('/', auth, todoitem_controller.todo_remove)
+router.put('/', auth, todoitem_controller.todo_update)

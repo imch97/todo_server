@@ -37,12 +37,12 @@ exports.todo_details = function (req, res) {
     })
 };
 
-exports.todo_update = function (req, res) {
-    ToDoItem.findByIdAndUpdate(req.body.id, {$set: req.body}, function (err, todo) {
-        if (err) return next(err);
-        res.send('ToDo udpated.');
-    });
-};
+// exports.todo_update = function (req, res) {
+//     ToDoItem.findByIdAndUpdate(req.body.id, {$set: req.body}, function (err, todo) {
+//         if (err) return next(err);
+//         res.send('ToDo udpated.');
+//     });
+// };
 
 
 exports.todo_delete = function (req, res) {
@@ -98,3 +98,42 @@ exports.todo_get = async function (req,res){
         res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
       }
 }
+
+exports.todo_remove = async function (req, res){
+    try{
+        const {_id} = req.body 
+
+        // const token = req.headers.authorization.split(' ')[1];
+        // const decoded = jwt.verify(token, JWT_SECRET)
+
+        await ToDoItem.findByIdAndRemove({ _id },function (err) {
+            if (err) return next(err);
+            res.send('Deleted successfully!');
+        })
+
+    }catch(e){
+        console.log(e);
+    }
+}
+
+exports.todo_update = async function (req, res){
+    try {
+        //const {_id,} = req.body;
+        
+
+        await ToDoItem.findByIdAndUpdate(req.body._id, {$set: req.body},function (err) {
+            if (err) return next(err);
+            res.send('ToDo udpated.');
+        })
+
+        
+    } catch (e) {
+        
+    }
+}
+
+ //const update_completed = !completed
+
+
+        // const token = req.headers.authorization.split(' ')[1];
+        // const decoded = jwt.verify(token, JWT_SECRET)
