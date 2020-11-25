@@ -86,12 +86,14 @@ exports.todo_create_with_users = async function(req, res){
 
 exports.todo_get = async function (req,res){
     try {
-
+        
         const token = req.headers.authorization.split(' ')[1];
+        //const token = req.headers.authorization;
         const decoded = jwt.verify(token, JWT_SECRET)
-
-        const todoitem = await Link.find({ owner: decoded.id })
+        
+        const todoitem = await ToDoItem.find({ owner: decoded.userId })
         res.json(todoitem)
+        console.log('sub_item ', todoitem)
       } catch (e) {
         res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
       }

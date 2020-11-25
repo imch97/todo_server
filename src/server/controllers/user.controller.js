@@ -86,7 +86,7 @@ exports.register = async function (req, res){
     const user = new User({ email, password: hashedPassword })
     console.log(user);
     await user.save()
-    console.log('END');
+    
     res.status(201).json({ message: 'Пользователь создан' })
 
   } catch (e) {

@@ -37,7 +37,7 @@ const ToDoInput = ( props ) => {
             const data = await request('/todoitem', 'POST', {text: value, token: auth.token}, {
               Authorization: `Bearer ${auth.token}`
             })
-            
+            message('ToDo добавлена!')
           } catch (e) {}
         }
       }

@@ -16,8 +16,9 @@ module.exports = router;
 //router.get('/', todoitem_controller.todo_details);
 router.put('/update', todoitem_controller.todo_update);
 router.delete('/delete', todoitem_controller.todo_delete);
+//CRUD
 
 router.get('/all', todoitem_controller.todo_getAll);
 
-router.post('/', todoitem_controller.todo_create_with_users)
+router.post('/',auth, todoitem_controller.todo_create_with_users)
 router.get('/',auth,todoitem_controller.todo_get);

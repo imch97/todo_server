@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import Button from 'react-bootstrap/Button';
 import {connect} from 'react-redux';
 import TodoItem from '../../Components/TodoItem/TodoItem';
@@ -25,7 +25,10 @@ import RadioBadge from "../../Components/RadioBadge/RaidoBadge";
 import { controlBadges } from '../../constants/todo';
 import {text} from "@fortawesome/fontawesome-svg-core";
 
-
+import {AuthContext} from '../../context/AuthContext'
+import {NavLink, useHistory} from 'react-router-dom'
+import {useHttp} from '../../hooks/http.hook'
+import {Loader} from '../../Components/loader/Loader'
 //import getAllTodo from '../../../../src/api.js'
 
 /**
@@ -35,10 +38,18 @@ import {text} from "@fortawesome/fontawesome-svg-core";
 
 
 const TodoList = (props) => {
-    
-    
-    
-    
+    //-------------------logout
+    const history = useHistory()
+    const auth = useContext(AuthContext)
+
+    const logoutHandler = event => {
+        event.preventDefault()
+        auth.logout()
+        history.push('/')
+    }
+    //-------------------logout
+
+
     const FILTER_MAP = {
         All: () => true,
         ToDo: todo => !todo.completed,
@@ -46,19 +57,41 @@ const TodoList = (props) => {
     };
 
     const {todos, remove, markAsCheck, clearCompleted, checkAll} = props
-    const [state, setState] = useState({items: todos, filter: 'All'})
+    const [state, setState] = useState([{items: todos, filter: 'All'}])
+
+    
 
     useEffect(()  => {
         const todoList = todos.filter(FILTER_MAP['All'])
-        setState({items: todoList, filter: 'All'})
-        
+        setState({items: todoList, filter: 'All'})        
     },[todos])
 
     useEffect(() => {
         localStorage.setItem('todos', JSON.stringify(todos))
     }, [todos])
 
-    
+    //load todoitems from MONGO
+
+    const {loading, request} = useHttp()
+    const {token} = useContext(AuthContext)
+
+    const fetchItems = useCallback(async () => {
+        try {
+          const fetched = await request('/todoitem', 'GET', null, {
+            Authorization: `Bearer ${token}`
+          })
+          setState(fetched)
+        } catch (e) {}
+      }, [token, request])
+
+      useEffect( () => {
+        fetchItems()
+      }, [fetchItems])
+
+      if (loading) {
+        return <Loader/>
+      }
+    //load todoitems from MONGO
     
 
 
@@ -75,12 +108,18 @@ const TodoList = (props) => {
     
     return (
         <React.Fragment>
+            <div className="logout" onClick={logoutHandler}><a href="/">LogOut</a></div>
+
+            <header className="App-header">        
+                Your todo list
+            </header>
+            
             <div className="todo-list">
                 <ToDoInput/>
                 <hr/>
                 <div className="list">                    
-                {/*getAllTodo.map((todo, index) => {console.log('todo', todo); console.log('index', index)})*/}    
-                    {state.items.map((todo, index) => (
+                    
+                {state.items.map((todo, index) => (
                         
                         <TodoItem
                         id={todo.id}
@@ -88,9 +127,10 @@ const TodoList = (props) => {
                         key={todo.id}
                         text={todo.text}                        
                         //onRemove={remove}
+                        // markAsChecked={markAsCheck}
                         onRemove={() => remove({id: todo.id, text: todo.text}) }
                         markAsChecked={() => markAsCheck({id: todo.id, completed: todo.completed})}
-                        // markAsChecked={markAsCheck}
+                        
                         todo={todo}
                         />
                         ))}

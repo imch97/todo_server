@@ -1,4 +1,19 @@
 //todo implement styles for the TodoList here
+
+.App-header {
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+.logout{
+  text-align: right;
+  margin-right: 30px;
+  margin-top: 20px;
+  font-size: 18px;
+}
 .todo-list {
   background: white;
   border-radius: 4px;
