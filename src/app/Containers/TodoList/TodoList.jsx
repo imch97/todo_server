@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext, useCallback} from 'react';
 import Button from 'react-bootstrap/Button';
 import {connect} from 'react-redux';
 import TodoItem from '../../Components/TodoItem/TodoItem';
-import {actions, initialState, todoSlice} from './todoSlice';
+import {actions, initialState, todoSlice, fetchTodoUpdate as fetchTodoUpdateAction, getToDoList as getToDoListAction} from './todoSlice';
 import PropTypes from 'prop-types'
 import { createSelector } from '@reduxjs/toolkit'
 /**
@@ -41,13 +41,13 @@ import {Loader} from '../../Components/loader/Loader'
 
 const TodoList = (props) => {
     //-------------------logout
-    const history = useHistory()
+    //const history = useHistory()
     const auth = useContext(AuthContext)
 
     const logoutHandler = event => {
         event.preventDefault()
         auth.logout()
-        history.push('/')
+        //history.push('/')
     }
     //-------------------logout
 
@@ -58,21 +58,14 @@ const TodoList = (props) => {
         Completed: todo => todo.completed
     };
 
-    const {todos, remove, markAsCheck, clearCompleted, checkAll} = props
+    const {todos, remove, markAsCheck, clearCompleted, checkAll, fetchTodoUpdate, getToDoList} = props
     const [state, setState] = useState({items: [], filter: 'All'})
 
 
 
     
-/*
-    useEffect(()  => {
-        const todoList = todos.filter(FILTER_MAP['All'])
-        setState({items: todoList, filter: 'All'})
-        //setState({items: fetched, filter: 'All'})
-    },[todos])
-*/
     useEffect(() => {
-        localStorage.setItem('todos', JSON.stringify(todos))
+        setState({...state, items: todos})
     }, [todos])
 
     //load todoitems from MONGO
@@ -81,12 +74,7 @@ const TodoList = (props) => {
     const {token} = useContext(AuthContext)
 
     const fetchItems = useCallback(async () => {
-        try {
-          const fetched = await request('/todoitem', 'GET', null, {
-            Authorization: `Bearer ${token}`
-          })
-          setState({items: fetched, filter: 'All'})
-        } catch (e) {}
+        getToDoList()
       }, [token, request])
 
       useEffect( () => {
@@ -98,11 +86,17 @@ const TodoList = (props) => {
       }
     //load todoitems from MONGO
     
+    const subCheck = (_id, completed) =>{
+        fetchTodoUpdate({_id, completed, text})
+        
+    }
 
 
     const btnClick = name => () => {        
         const todoList = state.items.filter(FILTER_MAP[name])//todos вместо state.items
         setState({items: todoList, filter: name,})  
+        // fetchTodoUpdate()
+        // console.log(fetchTodoUpdate, actions)
     };
 
     let kol= [];     
@@ -110,6 +104,7 @@ const TodoList = (props) => {
         if (el.completed == true) {kol.push(el)} 
     }; 
 
+    //console.log(actions)
     
     return (
         <React.Fragment>
@@ -123,7 +118,7 @@ const TodoList = (props) => {
                 <ToDoInput/>
                 <hr/>
                 <div className="list">                    
-                    
+                 {/*state.items.map((todo) => {console.log(state)})*/}   
                 {state.items.map((todo, index) => (
                         
                         
@@ -134,9 +129,9 @@ const TodoList = (props) => {
                         text={todo.text}                        
                         //onRemove={remove}
                         // markAsChecked={markAsCheck}
-                        onRemove={() => remove({id: todo._id, text: todo.text}) }
-                        markAsChecked={() => markAsCheck({id: todo._id, completed: todo.completed})}
-                        
+                        onRemove={() => remove({id: todo._id, completed: todo.completed, text: todo.text}) }
+                        // markAsChecked={() => markAsCheck({id: todo._id, completed: todo.completed})}
+                        markAsChecked= { () => fetchTodoUpdate({id: todo._id, completed: todo.completed, text: todo.text})}
                         todo={todo}
                         />
                 ))}
@@ -152,24 +147,21 @@ const TodoList = (props) => {
                             {`${state.items.length - kol.length} `}
                             tasks left
                         </li>
-                        <li>
-                        {/* <div className="btn-group btn-group-toggle" data-toggle="buttons"> */}
+                        <li>                       
                             {controlBadges.map((name) => (
                                 <button className={  name === state.filter ? "active" :'' } onClick={btnClick(name)}>                                    
-                                <input type="radio" className="options" autoComplete="off"
+                                    <input type="radio" className="options" autoComplete="off"
                                     key={name}
                                     onClick={btnClick(name)}
                                     name={name}                                    
                                     />
                                     {name}
-                                    </button>))}
-                                {/* </div> */}
+                                </button>))}                                
                         </li>
                         
                         <li
                             className="clearTasksButton"
-                            onClick={clearCompleted}
-                        >
+                            onClick={clearCompleted}>
                             Clear completed
                         </li>
                     </ul>
@@ -197,9 +189,11 @@ const mapDispatchToProps = {
     addTodo: actions.addTodo,
     remove: actions.remove,
     markAsCheck: actions.markAsCheck,
+    
     //remove: (todo) => actions.remove({id: todo.id, text: todo.text}),
     // markAsCheck: (todo) => actions.markAsCheck({id: todo.id, completed: todo.completed}),
-
+    fetchTodoUpdate: fetchTodoUpdateAction,
+    getToDoList: getToDoListAction,
     clearCompleted: actions.clearCompleted,
     checkAll: actions.checkAll
 }

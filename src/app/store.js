@@ -1,5 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import todo from './Containers/TodoList/todoSlice'
+import thunk from 'redux-thunk';
+import { applyMiddleware } from 'redux';
 
 export default configureStore({
   reducer: {
@@ -7,4 +9,5 @@ export default configureStore({
     // todo: //todo link here todo reducer from the slice
 
   },
+  //middleware: applyMiddleware
 });

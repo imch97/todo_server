@@ -67,7 +67,7 @@ exports.todo_create_with_users = async function(req, res){
     try {
         
         const {text} = req.body           
-    
+        console.log('ON create req body', req.body)
             
         const token = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(token, JWT_SECRET)
@@ -117,16 +117,11 @@ exports.todo_remove = async function (req, res){
 }
 
 exports.todo_update = async function (req, res){
-    try {
-        //const {_id,} = req.body;
-        
-
+    try {  
         await ToDoItem.findByIdAndUpdate(req.body._id, {$set: req.body},function (err) {
             if (err) return next(err);
             res.send('ToDo udpated.');
-        })
-
-        
+        })        
     } catch (e) {
         
     }
