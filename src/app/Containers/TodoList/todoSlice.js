@@ -50,7 +50,7 @@ export const getToDoList = createAsyncThunk('todo/getList', async () => {
   return data
 })
 
-export const removeOneToDo = createAsyncThunk('todo/deleteitem', async (todo) => {
+export const removeOneToDo = createAsyncThunk('todo/todoitem', async (todo) => {
 
   const new_completed = !todo.completed;
   const new_body = JSON.stringify({_id: todo.id,});
@@ -61,9 +61,9 @@ export const removeOneToDo = createAsyncThunk('todo/deleteitem', async (todo) =>
      'Content-Type': 'application/json'}})
   //console.log('response ', response)
   
-  window.M.toast({ html: 'Update ToDo`s' }) //todo set correct module name
+  window.M.toast({ html: 'DELETE ToDo`s' }) //todo set correct module name
   //console.log({_id: todo.id, text: todo.text, completed: new_completed})
-  return {_id: todo.id, text: todo.text, completed: new_completed, index: todo.index}
+  return {_id: todo.id, text: todo.text, completed: todo.completed}
   })
   
 
@@ -124,13 +124,13 @@ export const todoSlice = createSlice({
 
       return state.map(todo => todo._id === action.payload._id ? {...todo, completed: !todo.completed} : todo)
     },
-
+    
     [removeOneToDo.fulfilled]: (state, action) => {
       //console.log('STATE ', state)
       //console.log('ACTION ', action)
-      state.map(todo => console.log('todo.index  ',todo.index))
+      //state.map(todo => console.log('todo.index  ',todo.index))
       
-      return state.splice(state.findIndex(todo => todo.index=== action.payload.index), 1)
+      return state.filter(todo => todo._id !== action.payload._id)
     },
 
   }
