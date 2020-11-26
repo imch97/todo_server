@@ -31,7 +31,7 @@ const response = await fetch('/todoitem',
  headers: {
    Authorization: `Bearer ${Auth.getToken()}`, 
    'Content-Type': 'application/json'}})
-//console.log('response ', response)
+//console.log('TODO INDEX ----- ', todo)
 
 window.M.toast({ html: 'Update ToDo`s' }) //todo set correct module name
 //console.log({_id: todo.id, text: todo.text, completed: new_completed})
@@ -48,7 +48,24 @@ export const getToDoList = createAsyncThunk('todo/getList', async () => {
      'Content-Type': 'application/json'}})
   const data = await response.json()
   return data
+})
+
+export const removeOneToDo = createAsyncThunk('todo/deleteitem', async (todo) => {
+
+  const new_completed = !todo.completed;
+  const new_body = JSON.stringify({_id: todo.id,});
+  const response = await fetch('/todoitem', 
+  {method: 'DELETE', body:new_body,
+   headers: {
+     Authorization: `Bearer ${Auth.getToken()}`, 
+     'Content-Type': 'application/json'}})
+  //console.log('response ', response)
+  
+  window.M.toast({ html: 'Update ToDo`s' }) //todo set correct module name
+  //console.log({_id: todo.id, text: todo.text, completed: new_completed})
+  return {_id: todo.id, text: todo.text, completed: new_completed, index: todo.index}
   })
+  
 
 
 
@@ -101,12 +118,21 @@ export const todoSlice = createSlice({
 },
     
     [fetchTodoUpdate.fulfilled]: (state, action) => {
-      console.log('STATE ', state)
-      console.log('ACTION ', action)
+      //console.log('STATE ', state)
+      //console.log('ACTION ', action)
       //state.map(todo => console.log('todo.id  ',todo._id))
 
       return state.map(todo => todo._id === action.payload._id ? {...todo, completed: !todo.completed} : todo)
-    }
+    },
+
+    [removeOneToDo.fulfilled]: (state, action) => {
+      //console.log('STATE ', state)
+      //console.log('ACTION ', action)
+      state.map(todo => console.log('todo.index  ',todo.index))
+      
+      return state.splice(state.findIndex(todo => todo.index=== action.payload.index), 1)
+    },
+
   }
 });
 

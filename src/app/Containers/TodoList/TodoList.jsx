@@ -2,7 +2,8 @@ import React, {useState, useEffect, useContext, useCallback} from 'react';
 import Button from 'react-bootstrap/Button';
 import {connect} from 'react-redux';
 import TodoItem from '../../Components/TodoItem/TodoItem';
-import {actions, initialState, todoSlice, fetchTodoUpdate as fetchTodoUpdateAction, getToDoList as getToDoListAction} from './todoSlice';
+import {actions, initialState, todoSlice, fetchTodoUpdate as fetchTodoUpdateAction,
+     getToDoList as getToDoListAction, removeOneToDo as removeOneToDoAction} from './todoSlice';
 import PropTypes from 'prop-types'
 import { createSelector } from '@reduxjs/toolkit'
 /**
@@ -58,7 +59,7 @@ const TodoList = (props) => {
         Completed: todo => todo.completed
     };
 
-    const {todos, remove, markAsCheck, clearCompleted, checkAll, fetchTodoUpdate, getToDoList} = props
+    const {todos, remove, markAsCheck, clearCompleted, checkAll, fetchTodoUpdate, getToDoList, removeOneToDo} = props
     const [state, setState] = useState({items: [], filter: 'All'})
 
 
@@ -86,10 +87,10 @@ const TodoList = (props) => {
       }
     //load todoitems from MONGO
     
-    const subCheck = (_id, completed) =>{
-        fetchTodoUpdate({_id, completed, text})
+    // const subCheck = (_id, completed) =>{
+    //     fetchTodoUpdate({_id, completed, text})
         
-    }
+    // }
 
 
     const btnClick = name => () => {        
@@ -129,8 +130,9 @@ const TodoList = (props) => {
                         text={todo.text}                        
                         //onRemove={remove}
                         // markAsChecked={markAsCheck}
-                        onRemove={() => remove({id: todo._id, completed: todo.completed, text: todo.text}) }
+                        //onRemove={() => remove({id: todo._id, completed: todo.completed, text: todo.text}) }
                         // markAsChecked={() => markAsCheck({id: todo._id, completed: todo.completed})}
+                        onRemove={() => removeOneToDo({id: todo._id})}
                         markAsChecked= { () => fetchTodoUpdate({id: todo._id, completed: todo.completed, text: todo.text})}
                         todo={todo}
                         />
@@ -194,6 +196,7 @@ const mapDispatchToProps = {
     // markAsCheck: (todo) => actions.markAsCheck({id: todo.id, completed: todo.completed}),
     fetchTodoUpdate: fetchTodoUpdateAction,
     getToDoList: getToDoListAction,
+    removeOneToDo: removeOneToDoAction,
     clearCompleted: actions.clearCompleted,
     checkAll: actions.checkAll
 }
