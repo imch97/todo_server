@@ -31,7 +31,6 @@ export const getToDoList = createAsyncThunk('todo/getList', async () => {
   const data = await response.json()
   return data
 })
-
 export const fetchTodoUpdate = createAsyncThunk('todo/todoitem/update', async (todo) => {
 
 const new_completed = !todo.completed;
@@ -42,8 +41,8 @@ const response = await fetch('/todoitem',
    Authorization: `Bearer ${Auth.getToken()}`, 
    'Content-Type': 'application/json'}})
 //console.log('TODO INDEX ----- ', todo)
-
-window.M.toast({ html: 'Update ToDo`s' }) //todo set correct module name
+const mes = new_completed ? 'Выполнена ToDo' : 'Не выполнена ToDo'
+window.M.toast({ html: mes }) //todo set correct module name
 //console.log({_id: todo.id, text: todo.text, completed: new_completed})
 return {_id: todo.id, text: todo.text, completed: new_completed}
 })
@@ -62,6 +61,37 @@ export const removeOneToDo = createAsyncThunk('todo/todoitem', async (todo) => {
   window.M.toast({ html: 'DELETE ToDo`s' }) //todo set correct module name
   //console.log({_id: todo.id, text: todo.text, completed: new_completed})
   return {_id: todo.id, text: todo.text, completed: todo.completed}
+})
+
+
+export const removeComplteted = createAsyncThunk('todo/todoitem/all', async (todo) => {
+
+  const new_completed = !todo.completed;
+  const new_body = JSON.stringify({_id: todo.id,});
+  const response = await fetch('/todoitem/all', 
+  {method: 'DELETE', body:new_body,
+   headers: {
+     Authorization: `Bearer ${Auth.getToken()}`, 
+     'Content-Type': 'application/json'}})
+  //console.log('response ', response)
+  
+  window.M.toast({ html: 'DELETE Completed ToDo`s' }) //todo set correct module name
+  //console.log({_id: todo.id, text: todo.text, completed: new_completed})
+  return {_id: todo.id, text: todo.text, completed: todo.completed}
+})
+
+export const CompleteAllTodoUpdate = createAsyncThunk('todo/todoitem/complete', async (todo) => {
+
+  
+  const response = await fetch('/todoitem/all', 
+  {method: 'PUT', 
+   headers: {
+     Authorization: `Bearer ${Auth.getToken()}`, 
+     'Content-Type': 'application/json'}})
+  
+  window.M.toast({ html: 'Все ToDo`s Выполнены!' }) //todo set correct module name
+  
+  return {_id: todo.id, text: todo.text, completed: !todo.completed}
   })
   
 
@@ -92,7 +122,7 @@ export const todoSlice = createSlice({
     remove: (state, action, index) => {
       
       const { id, completed, text } = action.payload 
-      //console.log('id ', id, ' completed ', completed, ' text ', text)
+      
       
            
       state.splice(state.findIndex(i => i.id === id), 1)
@@ -115,21 +145,26 @@ export const todoSlice = createSlice({
       return action.payload
     }, 
 
-    [fetchTodoUpdate.fulfilled]: (state, action) => {
-      //console.log('STATE ', state)
-      //console.log('ACTION ', action)
-      //state.map(todo => console.log('todo.id  ',todo._id))
+    [fetchTodoUpdate.fulfilled]: (state, action) => {      
       console.log('fetchTodoUpdate')
       return state.map(todo => todo._id === action.payload._id ? {...todo, completed: !todo.completed} : todo)
     },
 
     [removeOneToDo.fulfilled]: (state, action) => {
-      //console.log('STATE ', state)
-      //console.log('ACTION ', action)
-      //state.map(todo => console.log('todo.index  ',todo.index))
       console.log('removeOneToDo')
       return state.filter(todo => todo._id !== action.payload._id)
     },
+
+    [removeComplteted.fulfilled]: (state, action) => {
+      console.log('removeComplteted')
+      return state.filter(todo => !todo.completed === true)
+    },
+
+    [CompleteAllTodoUpdate.fulfilled]: (state, action) => {
+      console.log('CompleteAllTodoUpdate')
+      return state.map(todo => todo ? {...todo, completed: true} : todo)
+    },
+
   }
 });
 

@@ -3,7 +3,8 @@ import Button from 'react-bootstrap/Button';
 import {connect} from 'react-redux';
 import TodoItem from '../../Components/TodoItem/TodoItem';
 import {actions, initialState, todoSlice, fetchTodoUpdate as fetchTodoUpdateAction,
-     getToDoList as getToDoListAction, removeOneToDo as removeOneToDoAction} from './todoSlice';
+     getToDoList as getToDoListAction, removeOneToDo as removeOneToDoAction,
+     removeComplteted as removeCompltetedAction, CompleteAllTodoUpdate as CompleteAllTodoUpdateAction} from './todoSlice';
 import PropTypes from 'prop-types'
 import { createSelector } from '@reduxjs/toolkit'
 /**
@@ -59,15 +60,16 @@ const TodoList = (props) => {
         Completed: todo => todo.completed
     };
 
-    const {todos, remove, markAsCheck, clearCompleted, checkAll, getToDoList, fetchTodoUpdate,  removeOneToDo} = props
-    const [state, setState] = useState({items: [], filter: 'All'})
-
-
+    const {todos, remove, markAsCheck, clearCompleted, checkAll, getToDoList, fetchTodoUpdate,
+          removeOneToDo, removeComplteted, CompleteAllTodoUpdate} = props
+    const [state, setState] = useState({items: todos, filter: 'All'})// [] вместо todos
 
     
     useEffect(() => {
         setState({...state, items: todos})
     }, [todos])
+
+    
 
     //load todoitems from MONGO
 
@@ -76,28 +78,25 @@ const TodoList = (props) => {
 
     const fetchItems = useCallback(async () => {
         getToDoList()
-      }, [token, request])
+    }, 
+    [token, request])
 
-      useEffect( () => {
+    useEffect( () => {
         fetchItems()
-      }, [fetchItems])
+    }, [fetchItems])
 
-      if (loading) {
+    if (loading) {
         return <Loader/>
-      }
+    }
     //load todoitems from MONGO
     
-    // const subCheck = (_id, completed) =>{
-    //     fetchTodoUpdate({_id, completed, text})
-        
-    // }
+    
 
 
-    const btnClick = name => () => {        
-        const todoList = state.items.filter(FILTER_MAP[name])//todos вместо state.items
-        setState({items: todoList, filter: name,})  
-        // fetchTodoUpdate()
-        // console.log(fetchTodoUpdate, actions)
+
+    const btnClick = name => () => {
+        const todoList = todos.filter(FILTER_MAP[name])//todos вместо state.items        
+        setState({items: todoList, filter: name,}) 
     };
 
     let kol= [];     
@@ -143,7 +142,8 @@ const TodoList = (props) => {
                     <ul className="footer">
                         <li
                             className="taskCount"
-                            onClick={checkAll}
+                            //onClick={checkAll}
+                            onClick={CompleteAllTodoUpdate}
                         >                            
                             {state.items.map(el => lostCountToDo(el))}                            
                             {`${state.items.length - kol.length} `}
@@ -163,7 +163,8 @@ const TodoList = (props) => {
                         
                         <li
                             className="clearTasksButton"
-                            onClick={clearCompleted}>
+                            //onClick={clearCompleted}
+                            onClick= {removeComplteted}>
                             Clear completed
                         </li>
                     </ul>
@@ -194,6 +195,8 @@ const mapDispatchToProps = {
     
     //remove: (todo) => actions.remove({id: todo.id, text: todo.text}),
     // markAsCheck: (todo) => actions.markAsCheck({id: todo.id, completed: todo.completed}),
+    CompleteAllTodoUpdate: CompleteAllTodoUpdateAction,
+    removeComplteted: removeCompltetedAction,
     fetchTodoUpdate: fetchTodoUpdateAction,
     getToDoList: getToDoListAction,
     removeOneToDo: removeOneToDoAction,

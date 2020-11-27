@@ -127,6 +127,40 @@ exports.todo_update = async function (req, res){
     }
 }
 
+exports.todo_complete_all = async function(req, res){
+    try {
+
+        const token = req.headers.authorization.split(' ')[1];
+        
+        const decoded = jwt.verify(token, JWT_SECRET)
+
+        await ToDoItem.updateMany({ owner: decoded.userId }, {$set: {completed: true}},function (err) {
+            if (err) return next(err);
+            res.send('All ToDo`s Completed.');
+        })
+    } catch (error) {
+        
+    }
+}
+
+exports.todo_delete_completed = async function(req, res){
+    try {
+
+        const token = req.headers.authorization.split(' ')[1];
+        
+        const decoded = jwt.verify(token, JWT_SECRET)
+
+        await ToDoItem.deleteMany({ owner: decoded.userId, completed: true },function (err) {
+            if (err) return next(err);
+            res.send('All ToDo`s Completed.');
+        })
+    } catch (error) {
+        
+    }
+}
+
+
+
  //const update_completed = !completed
 
 

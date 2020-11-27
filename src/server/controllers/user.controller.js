@@ -75,7 +75,9 @@ exports.register = async function (req, res){
     const {email, password} = req.body
     
     const candidate = await User.findOne({ email })
-    
+    const promise = new Promise((resolve, reject) => {})
+
+  
     
     
     if (candidate) {
