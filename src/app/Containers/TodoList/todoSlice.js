@@ -21,8 +21,18 @@ const Auth = (() => {
 })()
 
 
+export const getToDoList = createAsyncThunk('todo/getList', async () => {
 
-export const fetchTodoUpdate = createAsyncThunk('todo/todoitem', async (todo) => {
+  const response = await fetch('/todoitem', 
+  {method: 'GET', 
+   headers: {
+    Authorization: `Bearer ${Auth.getToken()}`, 
+     'Content-Type': 'application/json'}})
+  const data = await response.json()
+  return data
+})
+
+export const fetchTodoUpdate = createAsyncThunk('todo/todoitem/update', async (todo) => {
 
 const new_completed = !todo.completed;
 const new_body = JSON.stringify({_id: todo.id, completed: new_completed});
@@ -36,18 +46,6 @@ const response = await fetch('/todoitem',
 window.M.toast({ html: 'Update ToDo`s' }) //todo set correct module name
 //console.log({_id: todo.id, text: todo.text, completed: new_completed})
 return {_id: todo.id, text: todo.text, completed: new_completed}
-})
-
-
-export const getToDoList = createAsyncThunk('todo/getList', async () => {
-
-  const response = await fetch('/todoitem', 
-  {method: 'GET', 
-   headers: {
-    Authorization: `Bearer ${Auth.getToken()}`, 
-     'Content-Type': 'application/json'}})
-  const data = await response.json()
-  return data
 })
 
 export const removeOneToDo = createAsyncThunk('todo/todoitem', async (todo) => {
@@ -78,7 +76,7 @@ let nextTodoId = 0
 
 export const todoSlice = createSlice({
   name: 'todo',
-  initialState:[{_id: 45, text:'ddd'}],
+  initialState:[/*{_id: 45, text:'ddd'}*/],
   reducers: {
     addTodo: {
       reducer(state, action) {
@@ -115,24 +113,23 @@ export const todoSlice = createSlice({
 
     [getToDoList.fulfilled]: (state, action) => {
       return action.payload
-},
-    
+    }, 
+
     [fetchTodoUpdate.fulfilled]: (state, action) => {
       //console.log('STATE ', state)
       //console.log('ACTION ', action)
       //state.map(todo => console.log('todo.id  ',todo._id))
-
+      console.log('fetchTodoUpdate')
       return state.map(todo => todo._id === action.payload._id ? {...todo, completed: !todo.completed} : todo)
     },
-    
+
     [removeOneToDo.fulfilled]: (state, action) => {
       //console.log('STATE ', state)
       //console.log('ACTION ', action)
       //state.map(todo => console.log('todo.index  ',todo.index))
-      
+      console.log('removeOneToDo')
       return state.filter(todo => todo._id !== action.payload._id)
     },
-
   }
 });
 

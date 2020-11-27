@@ -59,7 +59,7 @@ const TodoList = (props) => {
         Completed: todo => todo.completed
     };
 
-    const {todos, remove, markAsCheck, clearCompleted, checkAll, fetchTodoUpdate, getToDoList, removeOneToDo} = props
+    const {todos, remove, markAsCheck, clearCompleted, checkAll, getToDoList, fetchTodoUpdate,  removeOneToDo} = props
     const [state, setState] = useState({items: [], filter: 'All'})
 
 
