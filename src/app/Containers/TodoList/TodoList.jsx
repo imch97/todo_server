@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext, useCallback} from 'react';
-import Button from 'react-bootstrap/Button';
+
 import {connect} from 'react-redux';
 import TodoItem from '../../Components/TodoItem/TodoItem';
 import {actions, initialState, todoSlice, fetchTodoUpdate as fetchTodoUpdateAction,
@@ -15,10 +15,10 @@ import { createSelector } from '@reduxjs/toolkit'
  * Use this component for enter tasks name
  */
 import ToDoInput from "../../Components/TodoInput/ToDoInput";
-import {bindActionCreators} from "../../utils/store";
+//import {bindActionCreators} from "../../utils/store";
 
 import './TodoList.scss'
-import RadioBadge from "../../Components/RadioBadge/RaidoBadge";
+//import RadioBadge from "../../Components/RadioBadge/RaidoBadge";
 
 /**
  * todo use this list of the control badges to show them at the control panel
@@ -28,7 +28,7 @@ import { controlBadges } from '../../constants/todo';
 import {text} from "@fortawesome/fontawesome-svg-core";
 
 import {AuthContext} from '../../context/AuthContext'
-import {NavLink, useHistory} from 'react-router-dom'
+import { useHistory} from 'react-router-dom'
 import {useHttp} from '../../hooks/http.hook'
 import {Loader} from '../../Components/loader/Loader'
 //import getAllTodo from '../../../../src/api.js'
@@ -43,13 +43,13 @@ import {Loader} from '../../Components/loader/Loader'
 
 const TodoList = (props) => {
     //-------------------logout
-    //const history = useHistory()
+    const history = useHistory()
     const auth = useContext(AuthContext)
 
     const logoutHandler = event => {
         event.preventDefault()
         auth.logout()
-        //history.push('/')
+        history.push('/')
     }
     //-------------------logout
 
@@ -123,7 +123,7 @@ const TodoList = (props) => {
                         
                         
                         <TodoItem
-                        id={todo._id}                        
+                        id={Number(todo._id)}                        
                         index={index}
                         key={todo._id}
                         text={todo.text}                        
@@ -145,15 +145,15 @@ const TodoList = (props) => {
                             //onClick={checkAll}
                             onClick={CompleteAllTodoUpdate}
                         >                            
-                            {state.items.map(el => lostCountToDo(el))}                            
-                            {`${state.items.length - kol.length} `}
+                            {todos.map(el => lostCountToDo(el))}                            
+                            {`${todos.length - kol.length} `}
                             tasks left
                         </li>
                         <li>                       
-                            {controlBadges.map((name) => (
+                            {controlBadges.map((name, index) => (
                                 <button className={  name === state.filter ? "active" :'' } onClick={btnClick(name)}>                                    
                                     <input type="radio" className="options" autoComplete="off"
-                                    key={name}
+                                    key={`${name.id}`}
                                     onClick={btnClick(name)}
                                     name={name}                                    
                                     />
@@ -164,6 +164,7 @@ const TodoList = (props) => {
                         <li
                             className="clearTasksButton"
                             //onClick={clearCompleted}
+                            key={'clearTasksButton'}
                             onClick= {removeComplteted}>
                             Clear completed
                         </li>

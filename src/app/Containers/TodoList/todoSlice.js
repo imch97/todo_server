@@ -106,7 +106,7 @@ let nextTodoId = 0
 
 export const todoSlice = createSlice({
   name: 'todo',
-  initialState:[/*{_id: 45, text:'ddd'}*/],
+  initialState:[],
   reducers: {
     addTodo: {
       reducer(state, action) {

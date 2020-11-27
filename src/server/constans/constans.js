@@ -19,3 +19,7 @@ module.exports = {
     MONGO_URI, 
     BASE_URL,
 }
+
+// TODO: move all vars to .env
+// process.env
+// dotenv npm

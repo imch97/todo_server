@@ -1,14 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 //import checkbox from 'react-bootstrap/checkbox';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faCheck, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import {actions, initialState, todoSlice} from "../../Containers/TodoList/todoSlice";
-import {useState} from 'react';
-import { connect } from 'react-redux'
+
 import './TodoItem.scss';
-import TodoList from "../../Containers/TodoList/TodoList";
-import removeTodo from "../../Containers/TodoList/TodoList"
+
 
 
 
@@ -35,7 +30,7 @@ const TodoItem = ({todo, text, id, completed, markAsChecked, onRemove}) => {
                 key={id}
             >
                  
-            <input type="checkbox" onClick={markAsChecked} checked={todo.completed}/>
+            <input type="checkbox" onClick={markAsChecked} checked={todo.completed} readOnly={true}/>
 
                 <label className = "checkbox" onClick={markAsChecked}  checked={todo.completed}></label>
                 

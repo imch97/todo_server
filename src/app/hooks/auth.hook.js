@@ -7,6 +7,7 @@ export const useAuth = () => {
   const [ready, setReady] = useState(false)
   //const [userId, setUserId] = useState(null)
 
+  // TODO: research useEffect deps array
   const login = useCallback((jwtToken/*, id*/) => {
     setToken(jwtToken)
     //setUserId(id)

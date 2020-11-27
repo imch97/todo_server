@@ -1,10 +1,12 @@
 //contollers for todo
-//const { default: TodoItem } = require('../../app/Components/TodoItem/TodoItem');
+
 const ToDoItem = require('../models/todoitem.model');
 //const auth = require('../middleware/auth.middleware.js')
 const {BASE_URL,JWT_SECRET} = require('../constans/constans.js')
 
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+
+
 
 
 //Simple version, without validation or sanitation
@@ -67,7 +69,7 @@ exports.todo_create_with_users = async function(req, res){
     try {
         
         const {text} = req.body           
-        console.log('ON create req body', req.body)
+        
             
         const token = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(token, JWT_SECRET)
@@ -101,21 +103,28 @@ exports.todo_get = async function (req,res){
 
 exports.todo_remove = async function (req, res){
     try{
-        const {_id} = req.body 
-
-        // const token = req.headers.authorization.split(' ')[1];
-        // const decoded = jwt.verify(token, JWT_SECRET)
-
+        const {_id} = req.body
         await ToDoItem.findByIdAndRemove({ _id },function (err) {
             if (err) return next(err);
             res.send('Deleted successfully!');
         })
-
     }catch(e){
         console.log(e);
     }
 }
 
+/*
+exports.todo_remove = function(req, res){
+
+    const { _id } = req.body
+    ToDoItem.findByIdAndRemove({ _id }).then(
+        result => {res.send('Deleted successfully!')},
+        error => {res.status(500).json({message: "ERROR!!!"})}
+    )
+    
+
+}
+*/
 exports.todo_update = async function (req, res){
     try {  
         await ToDoItem.findByIdAndUpdate(req.body._id, {$set: req.body},function (err) {
@@ -161,8 +170,4 @@ exports.todo_delete_completed = async function(req, res){
 
 
 
- //const update_completed = !completed
-
-
-        // const token = req.headers.authorization.split(' ')[1];
-        // const decoded = jwt.verify(token, JWT_SECRET)
+ 

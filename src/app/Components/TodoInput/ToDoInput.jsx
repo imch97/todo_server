@@ -1,6 +1,6 @@
 import React from 'react';
-import {actions, initialState, todoSlice} from "../../Containers/TodoList/todoSlice";
-import {useState, useEffect, useContext} from 'react';
+import {actions,} from "../../Containers/TodoList/todoSlice";
+import {useState, useContext} from 'react';
 import { connect } from 'react-redux'
 
 import {useHttp} from '../../hooks/http.hook'
@@ -10,31 +10,32 @@ import {AuthContext} from '../../context/AuthContext'
 
 
 
+
 const ToDoInput = ( props ) => {
 
 
     const auth = useContext(AuthContext)
     const message = useMessage()
-    const {loading, request,} = useHttp()
+    const {request} = useHttp()
   
     
 
 
 
     const [value, setValue] = useState("");    
-    const handleSubmit = e => {
+   /* const handleSubmit = e => {
         e.preventDefault();
         if (!value) {
             return ;
         }
         props.addTodo(value)
         setValue("");
-    };
+    };*/
 
     const pressHandler = async event => {
         if (event.key === 'Enter') {
           try {
-            const data = await request('/todoitem', 'POST', {text: value, token: auth.token}, {
+            await request('/todoitem', 'POST', {text: value, token: auth.token}, {
               Authorization: `Bearer ${auth.token}`
             })
             message('ToDo добавлена!')
@@ -42,6 +43,7 @@ const ToDoInput = ( props ) => {
         }
       }
 
+    
     return (
         <form className="form" /*onSubmit={handleSubmit}*/>
             <input
