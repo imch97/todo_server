@@ -1,12 +1,11 @@
-import React from 'react';
-import {BrowserRouter as Router} from 'react-router-dom'
-//import './App.css';
-import TodoList from "./app/Containers/TodoList/TodoList";
-import ToDoInput from "./app/Components/TodoInput/ToDoInput";
-import {Loader} from './app/Components/loader/Loader'
-import {useRoutes} from './app/routes'
-import {useAuth} from './app/hooks/auth.hook'
-import {AuthContext} from './app/context/AuthContext'
+import React from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+import TodoList from './app/Containers/TodoList/TodoList'
+
+import { Loader } from './app/Components/loader/Loader'
+import { useRoutes } from './app/routes'
+import { useAuth } from './app/hooks/auth.hook'
+import { AuthContext } from './app/context/AuthContext'
 import 'materialize-css'
 /*
 function App() {
@@ -25,26 +24,30 @@ function App() {
 */
 
 function App() {
-  const {token, login, logout, userId, ready} = useAuth()
-  const isAuthenticated = !!token
-  const routes = useRoutes(isAuthenticated)
+	const { token, login, logout, userId, ready } = useAuth()
+	const isAuthenticated = !!token
+	const routes = useRoutes(isAuthenticated)
 
-  if (!ready) {
-    return <Loader />
-  }
+	if (!ready) {
+		return <Loader />
+	}
 
-  return (
-    <AuthContext.Provider value={{
-      token, login, logout, userId, isAuthenticated
-    }}>
-      <Router>
-        { isAuthenticated && <TodoList/>}
-        <div className="container">
-          {routes}
-        </div>
-      </Router>
-    </AuthContext.Provider>
-  )
+	return (
+		<AuthContext.Provider
+			value={{
+				token,
+				login,
+				logout,
+				userId,
+				isAuthenticated,
+			}}
+		>
+			<Router>
+				{isAuthenticated && <TodoList />}
+				<div className="container">{routes}</div>
+			</Router>
+		</AuthContext.Provider>
+	)
 }
 
-export default App;
+export default App

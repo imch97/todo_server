@@ -16,7 +16,14 @@
   width: 100vh;
   margin-left: 1vh;
   text-align: justify;
+  
 }
+
+.completeTask{
+  text-decoration: line-through;
+}
+
+
 .deleteTask {
   float: right;
   size: 50px;

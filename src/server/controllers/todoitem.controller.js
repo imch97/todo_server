@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-
 const ToDoItem = require('../models/todoitem.model')
 
 exports.todoCreateWithUsers = async function (req, res) {
@@ -15,9 +14,7 @@ exports.todoCreateWithUsers = async function (req, res) {
 			owner: decoded.userId,
 		})
 
-		await todoitem.save()
-
-		res.status(201).json({ todoitem })
+		todoitem.save().then((result) => res.status(201).json(result))
 	} catch (e) {
 		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
 	}
@@ -30,7 +27,6 @@ exports.todoGet = async function (req, res) {
 		const todoitem = await ToDoItem.find({ owner: decoded.userId })
 
 		res.json(todoitem)
-		console.log('sub_item ', todoitem)
 	} catch (e) {
 		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
 	}
@@ -41,6 +37,7 @@ exports.todoRemove = async function (req, res) {
 		const { _id } = req.body
 		await ToDoItem.findByIdAndRemove({ _id }, function (err) {
 			if (err) return next(err)
+
 			res.send('Deleted successfully!')
 		})
 	} catch (e) {

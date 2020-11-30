@@ -86,7 +86,7 @@ button {
   padding: 10px 0 10px 0;
 }
 
-.active {
+.activeButton {
   //text-transform: uppercase;
   border: 2px solid black;
 }
@@ -97,5 +97,6 @@ input[type=radio]{
 
 button:focus{
   background: none;
+  
 }
 

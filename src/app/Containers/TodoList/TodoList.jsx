@@ -1,211 +1,180 @@
-import React, {useState, useEffect, useContext, useCallback} from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react'
 
-import {connect} from 'react-redux';
-import TodoItem from '../../Components/TodoItem/TodoItem';
-import {actions, initialState, todoSlice, fetchTodoUpdate as fetchTodoUpdateAction,
-     getToDoList as getToDoListAction, removeOneToDo as removeOneToDoAction,
-     removeComplteted as removeCompltetedAction, CompleteAllTodoUpdate as CompleteAllTodoUpdateAction} from './todoSlice';
+import { connect } from 'react-redux'
+import TodoItem from '../../Components/TodoItem/TodoItem'
+import {
+	fetchTodoUpdate as fetchTodoUpdateAction,
+	getToDoList as getToDoListAction,
+	removeOneToDo as removeOneToDoAction,
+	removeComplteted as removeCompltetedAction,
+	completeAllTodoUpdate as completeAllTodoUpdateAction,
+} from './todoSlice'
 import PropTypes from 'prop-types'
-import { createSelector } from '@reduxjs/toolkit'
-/**
- * todo implement component called ToDoInput
- * which should receive onSubmit function which will be called on the press enter key
- * should receive placeholder value which should show as placeholder for the input
- * this input changes should be managed by local state inside ToDoInput component
- * Use this component for enter tasks name
- */
-import ToDoInput from "../../Components/TodoInput/ToDoInput";
-//import {bindActionCreators} from "../../utils/store";
+
+import ToDoInput from '../../Components/TodoInput/ToDoInput'
 
 import './TodoList.scss'
-//import RadioBadge from "../../Components/RadioBadge/RaidoBadge";
 
-/**
- * todo use this list of the control badges to show them at the control panel
- */
+import { controlBadges } from '../../constants/todo'
 
-import { controlBadges } from '../../constants/todo';
-import {text} from "@fortawesome/fontawesome-svg-core";
-
-import {AuthContext} from '../../context/AuthContext'
-import { useHistory} from 'react-router-dom'
-import {useHttp} from '../../hooks/http.hook'
-import {Loader} from '../../Components/loader/Loader'
+import { AuthContext } from '../../context/AuthContext'
+import { useHistory } from 'react-router-dom'
+import { useHttp } from '../../hooks/http.hook'
+import { Loader } from '../../Components/loader/Loader'
 import classnames from 'classnames'
 
-
-
-/**
- * todo implement HOC for display the list of the todos and control panel and input for add new todos
- */
-
-
-
 const TodoList = (props) => {
-    //-------------------logout
-    const history = useHistory()
-    const auth = useContext(AuthContext)
+	//-------------------logout
+	const history = useHistory()
+	const auth = useContext(AuthContext)
 
-    const logoutHandler = event => {
-        event.preventDefault()
-        auth.logout()
-        history.push('/')
-    }
-    //-------------------logout
+	const logoutHandler = (event) => {
+		event.preventDefault()
+		auth.logout()
+		history.push('/')
+	}
+	//-------------------logout
 
+	const FILTER_MAP = {
+		All: () => true,
+		ToDo: (todo) => !todo.completed,
+		Completed: (todo) => todo.completed,
+	}
 
-    const FILTER_MAP = {
-        All: () => true,
-        ToDo: todo => !todo.completed,
-        Completed: todo => todo.completed
-    };
+	const {
+		todos,
+		getToDoList,
+		fetchTodoUpdate,
+		removeOneToDo,
+		removeComplteted,
+		completeAllTodoUpdate,
+	} = props
+	const [state, setState] = useState({ items: todos, filter: 'All' }) // [] вместо todos
 
-    const {todos, remove, markAsCheck, clearCompleted, checkAll, getToDoList, fetchTodoUpdate,
-          removeOneToDo, removeComplteted, CompleteAllTodoUpdate} = props
-    const [state, setState] = useState({items: todos, filter: 'All'})// [] вместо todos
+	useEffect(() => {
+		setState({ ...state, items: todos })
+	}, [todos])
 
-    
-    useEffect(() => {
-        setState({...state, items: todos})
-    }, [todos])
+	//load todoitems from MONGO
 
-    
+	const { loading, request } = useHttp()
+	const { token } = useContext(AuthContext)
 
-    //load todoitems from MONGO
+	const fetchItems = useCallback(async () => {
+		getToDoList()
+	}, [token, request])
 
-    const {loading, request} = useHttp()
-    const {token} = useContext(AuthContext)
+	useEffect(() => {
+		fetchItems()
+	}, [fetchItems])
 
-    const fetchItems = useCallback(async () => {
-        getToDoList()
-    }, 
-    [token, request])
+	if (loading) {
+		return <Loader />
+	}
+	//load todoitems from MONGO
 
-    useEffect( () => {
-        fetchItems()
-    }, [fetchItems])
+	const btnClick = (name) => () => {
+		const todoList = todos.filter(FILTER_MAP[name]) //todos вместо state.items
+		setState({ items: todoList, filter: name })
+	}
 
-    if (loading) {
-        return <Loader/>
-    }
-    //load todoitems from MONGO
-    
-    
+	let kol = []
+	function lostCountToDo(el) {
+		if (el.completed === true) {
+			kol.push(el)
+		}
+	}
 
+	const btnClass = (name, state) =>
+		classnames({ activeButton: name === state.filter })
 
+	return (
+		<React.Fragment>
+			<div className={classnames('logout')} onClick={logoutHandler}>
+				<a href="/">LogOut</a>
+			</div>
 
-    const btnClick = name => () => {
-        const todoList = todos.filter(FILTER_MAP[name])//todos вместо state.items        
-        setState({items: todoList, filter: name,}) 
-    };
+			<header className={classnames('App-header')}>Your todo list</header>
 
-    let kol= [];     
-    function lostCountToDo (el){
-        if (el.completed == true) {kol.push(el)} 
-    }; 
-
-    //console.log(actions)
-    
-    
-    return (
-        <React.Fragment>
-            <div className={classnames("logout")} onClick={logoutHandler}><a href="/">LogOut</a></div>
-
-            <header className={classnames("App-header")}>        
-                Your todo list
-            </header>
-            
-            <div className={classnames("todo-list")}>
-                <ToDoInput/>
-                <hr/>
-                <div className={classnames("list")}>                    
-                 {/*state.items.map((todo) => {console.log(state)})*/}   
-                {state.items.map((todo, index) => (
-                        
-                        
-                        <TodoItem
-                        id={Number(todo._id)}                        
-                        index={index}
-                        key={todo._id}
-                        text={todo.text}                        
-                        //onRemove={remove}
-                        // markAsChecked={markAsCheck}
-                        //onRemove={() => remove({id: todo._id, completed: todo.completed, text: todo.text}) }
-                        // markAsChecked={() => markAsCheck({id: todo._id, completed: todo.completed})}
-                        onRemove={ () => removeOneToDo({id: todo._id})}
-                        markAsChecked= { () => fetchTodoUpdate({id: todo._id, completed: todo.completed, text: todo.text})}
-                        todo={todo}
-                        />
-                ))}
-                </div>
-                {state.items.length != 0  &&
-                <div className={classnames("footerSection")} >
-                    <ul className={("footer")}>
-                        <li
-                            className={classnames("taskCount")}
-                            //onClick={checkAll}
-                            onClick={CompleteAllTodoUpdate}
-                        >                            
-                            {todos.map(el => lostCountToDo(el))}                            
-                            {`${todos.length - kol.length} `}
-                            tasks left
-                        </li>
-                        <li>{/*name === state.filter ? "active" :'' */ }                       
-                            {controlBadges.map((name, index) => (
-                                <button className={ classnames({'active': name === state.filter }) } onClick={btnClick(name)} key={index}>                                    
-                                    <input type="radio" className={classnames("options")} autoComplete="off"
-                                    key={index}
-                                    onClick={btnClick(name)}
-                                    name={name}                                    
-                                    />
-                                    {name}
-                                </button>))}                                
-                        </li>
-                        
-                        <li
-                            className={classnames("clearTasksButton")}
-                            //onClick={clearCompleted}
-                            key={'clearTasksButton'}
-                            onClick= {removeComplteted}>
-                            Clear completed
-                        </li>
-                    </ul>
-                </div>
-}  
-            </div>
-        </React.Fragment>
-    )
+			<div className={classnames('todo-list')}>
+				<ToDoInput />
+				{}
+				<hr />
+				<div className={classnames('list')}>
+					{state.items.map((todo, index) => (
+						<TodoItem
+							id={Number(todo._id)}
+							index={index}
+							key={todo._id}
+							text={todo.text}
+							onRemove={() => removeOneToDo({ id: todo._id })}
+							markAsChecked={() =>
+								fetchTodoUpdate({
+									id: todo._id,
+									completed: todo.completed,
+									text: todo.text,
+								})
+							}
+							todo={todo}
+						/>
+					))}
+				</div>
+				{todos.length !== 0 && (
+					<div className={classnames('footerSection')}>
+						<ul className={'footer'}>
+							<li
+								className={classnames('taskCount')}
+								onClick={completeAllTodoUpdate}
+							>
+								{todos.map((el) => lostCountToDo(el))}
+								{`${todos.length - kol.length} `}
+								tasks left
+							</li>
+							<li>
+								{controlBadges.map((name, index) => (
+									<button
+										className={btnClass(name, state)}
+										onClick={btnClick(name)}
+										key={index}
+									>
+										<input
+											type="radio"
+											className={classnames('options')}
+											autoComplete="off"
+											key={index}
+											onClick={btnClick(name)}
+											name={name}
+										/>
+										{name}
+									</button>
+								))}
+							</li>
+							<li
+								className={classnames('clearTasksButton')}
+								key={'clearTasksButton'}
+								onClick={removeComplteted}
+							>
+								Clear completed
+							</li>
+						</ul>
+					</div>
+				)}
+			</div>
+		</React.Fragment>
+	)
 }
-
-
-
-const selectTodos = state => state.todos
-
-const selectVisibleTodos = createSelector(
-    [selectTodos]
-)
 
 TodoList.propTypes = {
-    todos: PropTypes.array.isRequired,
+	todos: PropTypes.array.isRequired,
 }
 
-const mapStateToProps = state => ({todos: state.todo})
+const mapStateToProps = (state) => ({ todos: state.todo })
 const mapDispatchToProps = {
-    addTodo: actions.addTodo,
-    remove: actions.remove,
-    markAsCheck: actions.markAsCheck,
-    
-    //remove: (todo) => actions.remove({id: todo.id, text: todo.text}),
-    // markAsCheck: (todo) => actions.markAsCheck({id: todo.id, completed: todo.completed}),
-    CompleteAllTodoUpdate: CompleteAllTodoUpdateAction,
-    removeComplteted: removeCompltetedAction,
-    fetchTodoUpdate: fetchTodoUpdateAction,
-    getToDoList: getToDoListAction,
-    removeOneToDo: removeOneToDoAction,
-    clearCompleted: actions.clearCompleted,
-    checkAll: actions.checkAll
+	completeAllTodoUpdate: completeAllTodoUpdateAction,
+	removeComplteted: removeCompltetedAction,
+	fetchTodoUpdate: fetchTodoUpdateAction,
+	getToDoList: getToDoListAction,
+	removeOneToDo: removeOneToDoAction,
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList)
-// export default TodoList

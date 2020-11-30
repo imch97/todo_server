@@ -1,1 +1,1 @@
-export const controlBadges = [ 'All', 'ToDo', 'Completed' ];
+export const controlBadges = ['All', 'ToDo', 'Completed']
