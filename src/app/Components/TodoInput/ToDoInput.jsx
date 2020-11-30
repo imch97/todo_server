@@ -19,7 +19,6 @@ const ToDoInput = (props) => {
 	}
 
 	return (
-		// <form className="form">
 		<input
 			type="text"
 			className="input"
@@ -28,7 +27,6 @@ const ToDoInput = (props) => {
 			onChange={(e) => setValue(e.target.value)}
 			onKeyPress={pressHandler}
 		/>
-		// </form>
 	)
 }
 

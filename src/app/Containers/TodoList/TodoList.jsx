@@ -49,7 +49,7 @@ const TodoList = (props) => {
 		removeComplteted,
 		completeAllTodoUpdate,
 	} = props
-	const [state, setState] = useState({ items: todos, filter: 'All' }) // [] вместо todos
+	const [state, setState] = useState({ items: todos, filter: 'All' })
 
 	useEffect(() => {
 		setState({ ...state, items: todos })
@@ -74,7 +74,7 @@ const TodoList = (props) => {
 	//load todoitems from MONGO
 
 	const btnClick = (name) => () => {
-		const todoList = todos.filter(FILTER_MAP[name]) //todos вместо state.items
+		const todoList = todos.filter(FILTER_MAP[name])
 		setState({ items: todoList, filter: name })
 	}
 
