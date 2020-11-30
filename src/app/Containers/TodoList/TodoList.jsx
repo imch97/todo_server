@@ -31,7 +31,7 @@ import {AuthContext} from '../../context/AuthContext'
 import { useHistory} from 'react-router-dom'
 import {useHttp} from '../../hooks/http.hook'
 import {Loader} from '../../Components/loader/Loader'
-//import getAllTodo from '../../../../src/api.js'
+import classnames from 'classnames'
 
 
 
@@ -106,18 +106,19 @@ const TodoList = (props) => {
 
     //console.log(actions)
     
+    
     return (
         <React.Fragment>
-            <div className="logout" onClick={logoutHandler}><a href="/">LogOut</a></div>
+            <div className={classnames("logout")} onClick={logoutHandler}><a href="/">LogOut</a></div>
 
-            <header className="App-header">        
+            <header className={classnames("App-header")}>        
                 Your todo list
             </header>
             
-            <div className="todo-list">
+            <div className={classnames("todo-list")}>
                 <ToDoInput/>
                 <hr/>
-                <div className="list">                    
+                <div className={classnames("list")}>                    
                  {/*state.items.map((todo) => {console.log(state)})*/}   
                 {state.items.map((todo, index) => (
                         
@@ -138,10 +139,10 @@ const TodoList = (props) => {
                 ))}
                 </div>
                 {state.items.length != 0  &&
-                <div className="footerSection" >
-                    <ul className="footer">
+                <div className={classnames("footerSection")} >
+                    <ul className={("footer")}>
                         <li
-                            className="taskCount"
+                            className={classnames("taskCount")}
                             //onClick={checkAll}
                             onClick={CompleteAllTodoUpdate}
                         >                            
@@ -149,11 +150,11 @@ const TodoList = (props) => {
                             {`${todos.length - kol.length} `}
                             tasks left
                         </li>
-                        <li>                       
+                        <li>{/*name === state.filter ? "active" :'' */ }                       
                             {controlBadges.map((name, index) => (
-                                <button className={  name === state.filter ? "active" :'' } onClick={btnClick(name)}>                                    
-                                    <input type="radio" className="options" autoComplete="off"
-                                    key={`${name.id}`}
+                                <button className={ classnames({'active': name === state.filter }) } onClick={btnClick(name)} key={index}>                                    
+                                    <input type="radio" className={classnames("options")} autoComplete="off"
+                                    key={index}
                                     onClick={btnClick(name)}
                                     name={name}                                    
                                     />
@@ -162,7 +163,7 @@ const TodoList = (props) => {
                         </li>
                         
                         <li
-                            className="clearTasksButton"
+                            className={classnames("clearTasksButton")}
                             //onClick={clearCompleted}
                             key={'clearTasksButton'}
                             onClick= {removeComplteted}>

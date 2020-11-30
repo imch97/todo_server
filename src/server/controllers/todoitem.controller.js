@@ -1,173 +1,95 @@
-//contollers for todo
+const jwt = require('jsonwebtoken')
 
-const ToDoItem = require('../models/todoitem.model');
-//const auth = require('../middleware/auth.middleware.js')
-const {BASE_URL,JWT_SECRET} = require('../constans/constans.js')
+const ToDoItem = require('../models/todoitem.model')
 
-const jwt = require('jsonwebtoken');
+exports.todoCreateWithUsers = async function (req, res) {
+	try {
+		const { text } = req.body
 
+		const token = req.headers.authorization.split(' ')[1]
+		const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
+		const todoitem = new ToDoItem({
+			text,
+			completed: false,
+			owner: decoded.userId,
+		})
 
+		await todoitem.save()
 
-//Simple version, without validation or sanitation
-exports.test = function (req, res) {
-    res.send('Greetings from the Test controller!');
-};
-
-
-exports.todo_create = function (req, res) {
-    let todo = new ToDoItem(
-        {            
-            text: req.body.text,
-            completed: req.body.completed
-        },
-    
-    );
-    console.log("Todo Created: ", todo)
-    todo.save(function (err) {
-        if (err) {
-            return next(err);
-        }
-        res.send('ToDo Created successfully')
-    })
-};
-
-exports.todo_details = function (req, res) {
-    ToDoItem.findById(req.body.id, function (err, todo) {
-        if (err) return next(err);
-        res.send(todo);
-    })
-};
-
-// exports.todo_update = function (req, res) {
-//     ToDoItem.findByIdAndUpdate(req.body.id, {$set: req.body}, function (err, todo) {
-//         if (err) return next(err);
-//         res.send('ToDo udpated.');
-//     });
-// };
-
-
-exports.todo_delete = function (req, res) {
-    ToDoItem.findByIdAndRemove(req.body.id, function (err) {
-        if (err) return next(err);
-        res.send('Deleted successfully!');
-    })
-};
-
-exports.todo_getAll = function (req, res) {
-    ToDoItem.find({}, null, {sort: 'критерий сортировки'},function (err, todos) {
-        //console.log (res); //вот здесь будут все документы
-        
-        res.send(todos); 
-    });
-    
+		res.status(201).json({ todoitem })
+	} catch (e) {
+		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
+	}
 }
 
-//logic methods for
+exports.todoGet = async function (req, res) {
+	try {
+		const token = req.headers.authorization.split(' ')[1]
+		const decoded = jwt.verify(token, process.env.JWT_SECRET)
+		const todoitem = await ToDoItem.find({ owner: decoded.userId })
 
-exports.todo_create_with_users = async function(req, res){
-    try {
-        
-        const {text} = req.body           
-        
-            
-        const token = req.headers.authorization.split(' ')[1];
-        const decoded = jwt.verify(token, JWT_SECRET)
-        
-        const todoitem = new ToDoItem({
-            text, completed:false, owner: decoded.userId
-        })
-        
-        await todoitem.save()
-    
-        res.status(201).json({ todoitem })
-      } catch (e) {
-        res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
-    }
+		res.json(todoitem)
+		console.log('sub_item ', todoitem)
+	} catch (e) {
+		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
+	}
 }
 
-exports.todo_get = async function (req,res){
-    try {
-        
-        const token = req.headers.authorization.split(' ')[1];
-        //const token = req.headers.authorization;
-        const decoded = jwt.verify(token, JWT_SECRET)
-        
-        const todoitem = await ToDoItem.find({ owner: decoded.userId })
-        res.json(todoitem)
-        console.log('sub_item ', todoitem)
-      } catch (e) {
-        res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
-      }
+exports.todoRemove = async function (req, res) {
+	try {
+		const { _id } = req.body
+		await ToDoItem.findByIdAndRemove({ _id }, function (err) {
+			if (err) return next(err)
+			res.send('Deleted successfully!')
+		})
+	} catch (e) {
+		console.log(e)
+	}
 }
 
-exports.todo_remove = async function (req, res){
-    try{
-        const {_id} = req.body
-        await ToDoItem.findByIdAndRemove({ _id },function (err) {
-            if (err) return next(err);
-            res.send('Deleted successfully!');
-        })
-    }catch(e){
-        console.log(e);
-    }
+exports.todoUpdate = async function (req, res) {
+	try {
+		await ToDoItem.findByIdAndUpdate(
+			req.body._id,
+			{ $set: req.body },
+			function (err) {
+				if (err) return next(err)
+				res.send('ToDo udpated.')
+			}
+		)
+	} catch (e) {}
 }
 
-/*
-exports.todo_remove = function(req, res){
+exports.todoCompleteAll = async function (req, res) {
+	try {
+		const token = req.headers.authorization.split(' ')[1]
 
-    const { _id } = req.body
-    ToDoItem.findByIdAndRemove({ _id }).then(
-        result => {res.send('Deleted successfully!')},
-        error => {res.status(500).json({message: "ERROR!!!"})}
-    )
-    
+		const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-}
-*/
-exports.todo_update = async function (req, res){
-    try {  
-        await ToDoItem.findByIdAndUpdate(req.body._id, {$set: req.body},function (err) {
-            if (err) return next(err);
-            res.send('ToDo udpated.');
-        })        
-    } catch (e) {
-        
-    }
+		await ToDoItem.updateMany(
+			{ owner: decoded.userId },
+			{ $set: { completed: true } },
+			function (err) {
+				if (err) return next(err)
+				res.send('All ToDo`s Completed.')
+			}
+		)
+	} catch (error) {}
 }
 
-exports.todo_complete_all = async function(req, res){
-    try {
+exports.todoDeleteCompleted = async function (req, res) {
+	try {
+		const token = req.headers.authorization.split(' ')[1]
 
-        const token = req.headers.authorization.split(' ')[1];
-        
-        const decoded = jwt.verify(token, JWT_SECRET)
+		const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-        await ToDoItem.updateMany({ owner: decoded.userId }, {$set: {completed: true}},function (err) {
-            if (err) return next(err);
-            res.send('All ToDo`s Completed.');
-        })
-    } catch (error) {
-        
-    }
+		await ToDoItem.deleteMany(
+			{ owner: decoded.userId, completed: true },
+			function (err) {
+				if (err) return next(err)
+				res.send('All ToDo`s Completed.')
+			}
+		)
+	} catch (error) {}
 }
-
-exports.todo_delete_completed = async function(req, res){
-    try {
-
-        const token = req.headers.authorization.split(' ')[1];
-        
-        const decoded = jwt.verify(token, JWT_SECRET)
-
-        await ToDoItem.deleteMany({ owner: decoded.userId, completed: true },function (err) {
-            if (err) return next(err);
-            res.send('All ToDo`s Completed.');
-        })
-    } catch (error) {
-        
-    }
-}
-
-
-
- 
