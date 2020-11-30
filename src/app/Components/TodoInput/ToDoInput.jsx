@@ -14,6 +14,7 @@ const ToDoInput = (props) => {
 	const pressHandler = async (event) => {
 		if (event.key === 'Enter') {
 			createToDo(value)
+			event.target.value = ''
 		}
 	}
 
