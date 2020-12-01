@@ -13,10 +13,15 @@ exports.todoCreateWithUsers = async function (req, res) {
 			completed: false,
 			owner: decoded.userId,
 		})
-
 		todoitem.save().then((result) => res.status(201).json(result))
+		/*todoitem.save().then((result) =>
+			setTimeout(() => {
+				res.status(201).json(result)
+			}, 2000)
+		)*/
 	} catch (e) {
 		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
+		return e
 	}
 }
 
@@ -29,6 +34,7 @@ exports.todoGet = async function (req, res) {
 		res.json(todoitem)
 	} catch (e) {
 		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
+		return e
 	}
 }
 
@@ -42,6 +48,7 @@ exports.todoRemove = async function (req, res) {
 		})
 	} catch (e) {
 		console.log(e)
+		return e
 	}
 }
 
@@ -55,7 +62,10 @@ exports.todoUpdate = async function (req, res) {
 				res.send('ToDo udpated.')
 			}
 		)
-	} catch (e) {}
+	} catch (e) {
+		console.log(e)
+		return e
+	}
 }
 
 exports.todoCompleteAll = async function (req, res) {
@@ -72,7 +82,10 @@ exports.todoCompleteAll = async function (req, res) {
 				res.send('All ToDo`s Completed.')
 			}
 		)
-	} catch (error) {}
+	} catch (e) {
+		console.log(e)
+		return e
+	}
 }
 
 exports.todoDeleteCompleted = async function (req, res) {
@@ -88,5 +101,8 @@ exports.todoDeleteCompleted = async function (req, res) {
 				res.send('All ToDo`s Completed.')
 			}
 		)
-	} catch (error) {}
+	} catch (e) {
+		console.log(e)
+		return e
+	}
 }

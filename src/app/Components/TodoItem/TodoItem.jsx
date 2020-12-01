@@ -7,10 +7,14 @@ import './TodoItem.scss'
 const todoGetComplete = (todo) =>
 	classnames({ taskText: true, completeTask: todo.completed })
 
-const TodoItem = ({ todo, id, markAsChecked, onRemove }) => {
+const TodoItem = ({ todo, markAsChecked, onRemove, hide }) => {
+	const handleClick = (e) => {
+		onRemove(e)
+		hide(e)
+	}
 	return (
 		<React.Fragment>
-			<li className="todo" key={id}>
+			<li className="todo" key={todo._id}>
 				<input
 					type="checkbox"
 					onClick={markAsChecked}
@@ -26,7 +30,7 @@ const TodoItem = ({ todo, id, markAsChecked, onRemove }) => {
 
 				<div className={todoGetComplete(todo)}>
 					{todo.text}
-					<div className="deleteTask" onClick={onRemove}>
+					<div className="deleteTask" onClick={handleClick}>
 						<img
 							src="https://img.icons8.com/android/12/000000/trash.png"
 							width="20px"
@@ -42,10 +46,9 @@ const TodoItem = ({ todo, id, markAsChecked, onRemove }) => {
 }
 
 TodoItem.propTypes = {
-	text: PropTypes.string.isRequired,
-	id: PropTypes.number.isRequired,
 	markAsChecked: PropTypes.func.isRequired,
 	onRemove: PropTypes.func.isRequired,
+	hide: PropTypes.func.isRequired,
 }
 
 export default TodoItem
