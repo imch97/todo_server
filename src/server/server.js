@@ -22,15 +22,17 @@ app.use(function (req, res, next) {
 	next()
 })
 
-app.use('/api/todoitem', todoitem)
-app.use('/api/user', user)
+app.use('/todoitem', todoitem)
+app.use('/user', user)
+//--
+// app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+// app.get('*', (req, res) => {
+// 	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+// })
 
-app.use('/', express.static(path.join(__dirname, 'client', 'build')))
-
-app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-})
-
+const buildPath = path.join(__dirname, '..', 'build')
+app.use(express.static(buildPath))
+//--
 app.listen(process.env.PORT, () => {
 	console.log('Server is up and running on port numner ' + process.env.PORT)
 })
