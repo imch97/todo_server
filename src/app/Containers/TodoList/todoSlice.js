@@ -37,7 +37,7 @@ export const createToDo = createAsyncThunk('todo/create', async (text) => {
 				'Content-Type': 'application/json',
 			},
 		})
-		console.log('----')
+
 		const data = await response.json()
 
 		return {
