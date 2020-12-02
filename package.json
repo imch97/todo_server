@@ -34,12 +34,12 @@
     "concurrently": "^5.0.2"
   },
   "scripts": {
-    "client": "react-scripts start ",
+    "client": "react-scripts start",
     "server": "cd ./src/server && node server.js ",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "concurrently --kill-others \"npm run build\" \"npm run client\" \"npm run server\""
+    "start": "concurrently --kill-others  \"npm run client\" \"npm run server\""
   },
   "eslintConfig": {
     "extends": "react-app"
