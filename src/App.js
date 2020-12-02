@@ -45,6 +45,7 @@ function App() {
 		>
 			<Router to="/todoitems">
 				<div className="container">{routes}</div>
+				<Redirect to="/todoitems" />
 			</Router>
 		</AuthContext.Provider>
 	)
