@@ -10,7 +10,7 @@ export const useRoutes = (isAuthenticated) => {
 				<Route path="/todoitems" exact>
 					<TodoList />
 				</Route>
-				<Redirect to="/" />
+				<Redirect to="/todoitems" />
 			</Switch>
 		)
 	}

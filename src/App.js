@@ -6,6 +6,7 @@ import { Loader } from './app/Components/loader/Loader'
 import { useRoutes } from './app/routes'
 import { useAuth } from './app/hooks/auth.hook'
 import { AuthContext } from './app/context/AuthContext'
+import { AuthPage } from './app/pages/AuthPage.jsx'
 import 'materialize-css'
 /*
 function App() {
@@ -42,8 +43,8 @@ function App() {
 				isAuthenticated,
 			}}
 		>
-			<Router>
-				{isAuthenticated && <TodoList />}
+			<Router to="/todoitems">
+				{/*isAuthenticated && <TodoList />*/}
 				<div className="container">{routes}</div>
 			</Router>
 		</AuthContext.Provider>
