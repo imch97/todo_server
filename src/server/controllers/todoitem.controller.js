@@ -35,15 +35,13 @@ exports.todoGet = async function (req, res) {
 
 exports.todoRemove = async function (req, res) {
 	try {
-		/*
 		const { _id } = req.body
 		await ToDoItem.findByIdAndRemove({ _id }, function (err) {
 			if (err) return next(err)
 
 			res.send('Deleted successfully!')
-		})*/
-
-		setTimeout(() => res.status(500).send(), 5000)
+		})
+		//setTimeout(() => res.status(500).send(), 5000)
 	} catch (e) {
 		console.log(e)
 		return e
