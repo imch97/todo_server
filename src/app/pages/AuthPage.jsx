@@ -28,7 +28,7 @@ export const AuthPage = () => {
 
 	const registerHandler = async () => {
 		try {
-			const data = await request('/user/register', 'POST', { ...form })
+			const data = await request('/api/user/register', 'POST', { ...form })
 			message(data.message)
 		} catch (e) {
 			console.log('Errors', e)
@@ -37,7 +37,7 @@ export const AuthPage = () => {
 
 	const loginHandler = async () => {
 		try {
-			const data = await request('user/login', 'POST', { ...form })
+			const data = await request('/api/user/login', 'POST', { ...form })
 			auth.login(data.token, data.userId)
 		} catch (e) {
 			console.log('Errors', e)

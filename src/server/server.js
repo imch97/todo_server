@@ -22,12 +22,12 @@ app.use(function (req, res, next) {
 	next()
 })
 
-app.use('/todoitem', todoitem)
-app.use('/user', user)
+app.use('/api/todoitem', todoitem)
+app.use('/api/user', user)
 //--
-app.use('/', express.static(path.join(__dirname, 'src', 'build')))
+//app.use('/', express.static(path.join(__dirname, 'build')))
 app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, 'src', 'build', 'index.html'))
+	res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
 })
 
 // const buildPath = path.join(__dirname, '..', 'build')

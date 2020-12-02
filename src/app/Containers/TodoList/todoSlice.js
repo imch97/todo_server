@@ -13,7 +13,7 @@ const Auth = (() => {
 
 export const getToDoList = createAsyncThunk('todo/getList', async () => {
 	try {
-		const response = await fetch('/todoitem', {
+		const response = await fetch('/api/todoitem', {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${Auth.getToken()}`,
@@ -29,7 +29,7 @@ export const getToDoList = createAsyncThunk('todo/getList', async () => {
 
 export const createToDo = createAsyncThunk('todo/create', async (text) => {
 	try {
-		const response = await fetch('/todoitem', {
+		const response = await fetch('/api/todoitem', {
 			method: 'POST',
 			body: JSON.stringify({ text }),
 			headers: {
@@ -54,7 +54,7 @@ export const fetchTodoUpdate = createAsyncThunk(
 	'todo/todoitem/update',
 	async (todo) => {
 		try {
-			await fetch('/todoitem', {
+			await fetch('/api/todoitem', {
 				method: 'PUT',
 				body: JSON.stringify({ _id: todo.id, completed: !todo.completed }),
 				headers: {
@@ -74,7 +74,7 @@ export const fetchTodoUpdate = createAsyncThunk(
 
 export const removeOneToDo = createAsyncThunk('todo/todoitem', async (todo) => {
 	try {
-		await fetch('/todoitem', {
+		await fetch('/api/todoitem', {
 			method: 'DELETE',
 			body: JSON.stringify({ _id: todo.id }),
 			headers: {
@@ -95,7 +95,7 @@ export const removeComplteted = createAsyncThunk(
 	async (todo) => {
 		try {
 			const new_body = JSON.stringify({ _id: todo.id })
-			await fetch('/todoitem/all', {
+			await fetch('/api/todoitem/all', {
 				method: 'DELETE',
 				body: new_body,
 				headers: {
@@ -116,7 +116,7 @@ export const completeAllTodoUpdate = createAsyncThunk(
 	'todo/todoitem/complete',
 	async (todo) => {
 		try {
-			await fetch('/todoitem/all', {
+			await fetch('/api/todoitem/all', {
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${Auth.getToken()}`,
