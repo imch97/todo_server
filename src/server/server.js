@@ -30,8 +30,12 @@ app.use('/user', user)
 // 	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
 // })
 
-const buildPath = path.join(__dirname, '..', 'build')
-app.use(express.static(buildPath))
+// const buildPath = path.join(__dirname, '..', 'build')
+// app.use(express.static(buildPath))
+
+app.get('*', (req, res) => {
+	res.sendFile(path.resolve(__dirname, './src/app', 'build', 'index.html'))
+})
 //--
 app.listen(process.env.PORT, () => {
 	console.log('Server is up and running on port numner ' + process.env.PORT)
