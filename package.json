@@ -30,11 +30,16 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1"
   },
-  "scripts": {    
-    "start": "react-scripts start && cd ./src/server node server.js",
+  "devDependencies": {
+    "concurrently": "^5.0.2"
+  },
+  "scripts": {
+    "client": "react-scripts start ",
+    "server": "cd ./src/server && node server.js ",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start": "concurrently --kill-others \"npm run client\" \"npm run server\""
   },
   "eslintConfig": {
     "extends": "react-app"
