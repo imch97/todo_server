@@ -34,7 +34,7 @@ app.use('/user', user)
 // app.use(express.static(buildPath))
 
 app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, './src/app', 'build', 'index.html'))
+	res.sendFile(path.resolve(__dirname, 'src', 'build', 'index.html'))
 })
 //--
 app.listen(process.env.PORT, () => {
