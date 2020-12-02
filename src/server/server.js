@@ -25,17 +25,14 @@ app.use(function (req, res, next) {
 app.use('/todoitem', todoitem)
 app.use('/user', user)
 //--
-// app.use('/', express.static(path.join(__dirname, 'client', 'build')))
-// app.get('*', (req, res) => {
-// 	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-// })
+app.use('/', express.static(path.join(__dirname, 'src', 'build')))
+app.get('*', (req, res) => {
+	res.sendFile(path.resolve(__dirname, 'src', 'build', 'index.html'))
+})
 
 // const buildPath = path.join(__dirname, '..', 'build')
 // app.use(express.static(buildPath))
 
-app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, 'src', 'build', 'index.html'))
-})
 //--
 app.listen(process.env.PORT, () => {
 	console.log('Server is up and running on port numner ' + process.env.PORT)
