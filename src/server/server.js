@@ -22,8 +22,8 @@ app.use(function (req, res, next) {
 	next()
 })
 
-app.use('/todoitem', todoitem)
-app.use('/user', user)
+app.use('/api/todoitem', todoitem)
+app.use('/api/user', user)
 
 app.use('/', express.static(path.join(__dirname, 'client', 'build')))
 
