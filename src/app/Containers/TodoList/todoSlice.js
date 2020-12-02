@@ -74,18 +74,29 @@ export const fetchTodoUpdate = createAsyncThunk(
 
 export const removeOneToDo = createAsyncThunk('todo/todoitem', async (todo) => {
 	try {
-		await fetch('/api/todoitem', {
+		const response = await fetch('/api/todoitem', {
 			method: 'DELETE',
-			body: JSON.stringify({ _id: todo.id }),
+			body: JSON.stringify({ _id: todo._id }),
 			headers: {
 				Authorization: `Bearer ${Auth.getToken()}`,
 				'Content-Type': 'application/json',
 			},
 		})
-
+		/*
+		if (response.status > 399) {
+			return response
+		}
 		window.M.toast({ html: 'DELETE ToDo`s' })
-		return { _id: todo.id, text: todo.text, completed: todo.completed }
+		return {
+			_id: todo.id,
+			text: todo.text,
+			completed: todo.completed,
+			owner: todo.owner,
+		}*/
+		console.log('e', response)
+		return response
 	} catch (e) {
+		console.log('1122', e)
 		return e
 	}
 })
@@ -107,7 +118,8 @@ export const removeComplteted = createAsyncThunk(
 			window.M.toast({ html: 'DELETE Completed ToDo`s' })
 			return { _id: todo.id, text: todo.text, completed: todo.completed }
 		} catch (e) {
-			return e
+			console.log(e)
+			return { _id: todo.id, text: todo.text, completed: todo.completed }
 		}
 	}
 )
@@ -156,7 +168,6 @@ export const todoSlice = createSlice({
 				text: todo.text,
 				completed: todo.completed,
 				owner: todo.owner,
-				show: true,
 			}))
 		},
 
@@ -169,6 +180,20 @@ export const todoSlice = createSlice({
 		},
 
 		[removeOneToDo.fulfilled]: (state, action) => {
+			console.log(action)
+			if (
+				action.payload.status > 399 ||
+				action.payload.message === 'Failed to fetch'
+			) {
+				state.push({
+					_id: action.meta.arg._id,
+					text: action.meta.arg.text,
+					completed: action.meta.arg.completed,
+					owner: action.meta.arg.owner,
+				})
+
+				return
+			}
 			return state.filter((todo) => todo._id !== action.payload._id)
 		},
 
@@ -185,7 +210,6 @@ export const todoSlice = createSlice({
 				text: action.payload.text,
 				completed: false,
 				owner: action.payload.owner,
-				show: true,
 			})
 		},
 	},

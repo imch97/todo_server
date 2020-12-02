@@ -90,16 +90,6 @@ const TodoList = (props) => {
 	const btnClass = (name, state) =>
 		classnames({ activeButton: name === state.filter })
 
-	const hidenTodo = (todo) => {
-		return {
-			_id: todo._id,
-			text: todo.text,
-			completed: todo.completed,
-			show: !todo.show,
-			owner: todo.owner,
-		}
-	}
-
 	return (
 		<React.Fragment>
 			<div className={classnames('logout')} onClick={logoutHandler}>
@@ -114,38 +104,38 @@ const TodoList = (props) => {
 				<hr />
 
 				<div className={classnames('list')}>
-					{/*state.items.map((todo, index) => console.log('show  ', todo.show))*/}
-
-					{state.items.map(
-						(todo, index) =>
-							todo.show && (
-								<TodoItem
-									id={Number(todo._id)}
-									index={index}
-									key={todo._id}
-									text={todo.text}
-									//hide={() => hidenTodo(todo)}
-									hide={() =>
-										deleteTodo({
-											_id: todo._id,
-											text: todo.text,
-											completed: todo.completed,
-											show: !todo.show,
-											owner: todo.owner,
-										})
-									}
-									onRemove={() => removeOneToDo({ id: todo._id })}
-									markAsChecked={() =>
-										fetchTodoUpdate({
-											id: todo._id,
-											completed: todo.completed,
-											text: todo.text,
-										})
-									}
-									todo={todo}
-								/>
-							)
-					)}
+					{state.items.map((todo, index) => (
+						<TodoItem
+							id={Number(todo._id)}
+							index={index}
+							key={todo._id}
+							text={todo.text}
+							hide={() =>
+								deleteTodo({
+									_id: todo._id,
+									text: todo.text,
+									completed: todo.completed,
+									owner: todo.owner,
+								})
+							}
+							onRemove={() =>
+								removeOneToDo({
+									_id: todo._id,
+									text: todo.text,
+									completed: todo.completed,
+									owner: todo.owner,
+								})
+							}
+							markAsChecked={() =>
+								fetchTodoUpdate({
+									id: todo._id,
+									completed: todo.completed,
+									text: todo.text,
+								})
+							}
+							todo={todo}
+						/>
+					))}
 				</div>
 				{todos.length !== 0 && (
 					<div className={classnames('footerSection')}>

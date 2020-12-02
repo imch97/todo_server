@@ -14,11 +14,6 @@ exports.todoCreateWithUsers = async function (req, res) {
 			owner: decoded.userId,
 		})
 		todoitem.save().then((result) => res.status(201).json(result))
-		/*todoitem.save().then((result) =>
-			setTimeout(() => {
-				res.status(201).json(result)
-			}, 2000)
-		)*/
 	} catch (e) {
 		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
 		return e
@@ -40,12 +35,15 @@ exports.todoGet = async function (req, res) {
 
 exports.todoRemove = async function (req, res) {
 	try {
+		/*
 		const { _id } = req.body
 		await ToDoItem.findByIdAndRemove({ _id }, function (err) {
 			if (err) return next(err)
 
 			res.send('Deleted successfully!')
-		})
+		})*/
+
+		setTimeout(() => res.status(500).send(), 5000)
 	} catch (e) {
 		console.log(e)
 		return e
