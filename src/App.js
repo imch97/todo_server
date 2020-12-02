@@ -43,12 +43,9 @@ function App() {
 				isAuthenticated,
 			}}
 		>
-			<Switch>
-				<Router to="/todoitems">
-					<div className="container">{routes}</div>
-				</Router>
-				<Redirect to="/" />
-			</Switch>
+			<Router to="/todoitems">
+				<div className="container">{routes}</div>
+			</Router>
 		</AuthContext.Provider>
 	)
 }
