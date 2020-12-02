@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom'
 import TodoList from './app/Containers/TodoList/TodoList'
 
 import { Loader } from './app/Components/loader/Loader'
@@ -43,10 +43,12 @@ function App() {
 				isAuthenticated,
 			}}
 		>
-			<Router to="/todoitems">
-				{/*isAuthenticated && <TodoList />*/}
-				<div className="container">{routes}</div>
-			</Router>
+			<Switch>
+				<Router to="/todoitems">
+					<div className="container">{routes}</div>
+				</Router>
+				<Redirect to="/" />
+			</Switch>
 		</AuthContext.Provider>
 	)
 }
