@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const path = require('path')
 const bodyParser = require('body-parser')
 const todoitem = require('./routes/todoitem.route')
 const user = require('./routes/user.route')
@@ -25,13 +26,11 @@ app.use(function (req, res, next) {
 app.use('/api/todoitem', todoitem)
 app.use('/api/user', user)
 //--
-//app.use('/', express.static(path.join(__dirname, 'build')))
+console.log(path.join(__dirname, '../../build'))
+app.use('/', express.static(path.join(__dirname, '../../build')))
 app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, '../../', 'build', 'index.html'))
+	res.sendFile(path.resolve(__dirname + '../../build/index.html'))
 })
-
-// const buildPath = path.join(__dirname, '..', 'build')
-// app.use(express.static(buildPath))
 
 //--
 app.listen(process.env.PORT, () => {
