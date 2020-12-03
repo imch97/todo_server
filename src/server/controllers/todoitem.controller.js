@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken')
 const ToDoItem = require('../models/todoitem.model')
 
+exports.testing = async function (req, res) {
+	res.status(200).json({ message: 'test compleete' })
+}
+
 exports.todoCreateWithUsers = async function (req, res) {
 	try {
 		const { text } = req.body

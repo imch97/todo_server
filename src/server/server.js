@@ -25,6 +25,7 @@ app.use(function (req, res, next) {
 
 app.use('/api/todoitem', todoitem)
 app.use('/api/user', user)
+app.use('/api/test', todoitem)
 //--
 
 app.use(express.static(path.join(__dirname, '../../build')))
