@@ -153,8 +153,8 @@ export const todoSlice = createSlice({
 	name: 'todo',
 	initialState: [],
 	reducers: {
-		deleteTodo: (state, action, index) => {
-			const { _id, text } = action.payload
+		deleteTodo: (state, action) => {
+			const { _id } = action.payload
 			state.splice(
 				state.findIndex((i) => i._id === _id),
 				1
@@ -163,7 +163,7 @@ export const todoSlice = createSlice({
 	},
 	extraReducers: {
 		[getToDoList.fulfilled]: (state, action) => {
-			return action.payload.map((todo, index) => ({
+			return action.payload.map((todo) => ({
 				_id: todo._id,
 				text: todo.text,
 				completed: todo.completed,

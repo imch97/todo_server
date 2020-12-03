@@ -1,12 +1,11 @@
 import React from 'react'
-import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom'
-import TodoList from './app/Containers/TodoList/TodoList'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Loader } from './app/Components/loader/Loader'
 import { useRoutes } from './app/routes'
 import { useAuth } from './app/hooks/auth.hook'
 import { AuthContext } from './app/context/AuthContext'
-import { AuthPage } from './app/pages/AuthPage.jsx'
+
 import 'materialize-css'
 /*
 function App() {
