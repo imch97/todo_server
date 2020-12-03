@@ -27,7 +27,7 @@ app.use('/api/todoitem', todoitem)
 app.use('/api/user', user)
 app.use('/api/test', todoitem)
 //--
-app.use('/', express.static(path.join(__dirname, '../../build/index.html')))
+app.use('/', express.static(path.join(__dirname, '../../build/')))
 app.get('*', (req, res) => {
 	res.sendFile(path.resolve(__dirname + '/../../build/index.html'))
 })
