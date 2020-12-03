@@ -10,7 +10,7 @@
 }
 .logout{
   text-align: right;
-  margin-right: 30px;
+  margin-right: 20px;
   margin-top: 20px;
   font-size: 18px;
 }
@@ -98,5 +98,10 @@ input[type=radio]{
 button:focus{
   background: none;
   
+}
+
+hr{
+  border: 0;
+  border-top: 1px solid rgba(0,0,0,.1);
 }
 
